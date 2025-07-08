@@ -1,11 +1,14 @@
 import express from 'express';
-const app = express();
+import { connectDB } from './config/db.js';
 import dotenv from 'dotenv';
+import signup from './routes/auth/signup.js'
+
 dotenv.config();
 
-import { connectDB } from './config/db.js';
+const app = express();
+app.use(express.json());
 await connectDB();        // make sure the call happens before app.listen(...)
-
+app.use('/api/users', signup);
 
 const Port = process.env.Port || 5000;
 app.listen(Port, ()=>(
