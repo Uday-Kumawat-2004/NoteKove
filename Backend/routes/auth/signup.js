@@ -14,7 +14,7 @@ router.post('/signup', async (req, res) => {
 
         if(existingUser){
             return res.status(409).json({
-                error: `Email already registered with userId: ${existingUser._id}`
+                error: `Email already registered`
             })
         }
 
@@ -26,7 +26,7 @@ router.post('/signup', async (req, res) => {
 
         const savedUser = await newUser.save(); 
         res.status(201).json({
-            message: `User registered successfully with userId: ${savedUser._id}`
+            message: `User registered successfully`
         });
     }
     catch(err){
