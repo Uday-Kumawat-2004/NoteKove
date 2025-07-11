@@ -9,7 +9,7 @@ dotenv.config();
 const app= express();
 app.use(cookieParser());
 app.use(express.json());
-await connectDB(); 
+await connectDB(); P
 
 
 app.use('/api/users', signup);
