@@ -1,16 +1,20 @@
-
-import './App.css'
-import Singup from '../pages/signup'
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Signup from "../pages/signup";
+import Signin from "../pages/Signin";
 
 function App() {
-
   return (
-    <>
-    <div className='w-screen h-screen bg-[#1d262f]'>
-        <Singup />
+    <div className="w-screen h-screen bg-[#0b212e]">
+      <Router>
+        <Routes>
+          <Route path="/" element={<Signup />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/signin" element={<Signin />} />
+        </Routes>
+      </Router>
     </div>
-    </>
-  )
+  );
 }
 
-export default App
+export default App;
