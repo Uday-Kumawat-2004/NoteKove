@@ -54,6 +54,10 @@ export default function Signup() {
       setTimeout(() => {
         setShowPopUp(false);
       }, 3000);
+      setTimeout(() => {
+        navigate("/signin");
+      }, 3000);
+      
     } catch (err) {
       const res = err?.response;
 

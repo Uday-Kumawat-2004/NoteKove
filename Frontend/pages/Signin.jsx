@@ -40,6 +40,9 @@ export default function Signin() {
       setTimeout(() => {
         setShowPopUp(false);
       }, 3000);
+      setTimeout(() => {
+        navigate("/home");
+      }, 3000);
     } catch (err) {
       const res = err?.response;
 

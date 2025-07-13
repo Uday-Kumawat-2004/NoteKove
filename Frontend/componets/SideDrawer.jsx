@@ -10,9 +10,9 @@ export default function SideDrawer() {
     <div
       className={`flex flex-col p-2.5 ${
         toggle ? "w-[200px]" : "w-[65px]"
-      } min-h-screen max-h-screen transition-all duration-300`}
+      } h-[calc(100vh-60px)] shadow-md shadow-gray-400 transition-all duration-300`}
     >
-      <div className="flex items-center">
+      <div className={`flex items-center mb-5 ${toggle ? "justify-end" : "justify-center"} transition-all duration-300`}>
         <button
           type="button"
           onClick={() => setToggle((prev) => !prev)}
@@ -20,7 +20,7 @@ export default function SideDrawer() {
         >
           <FontAwesomeIcon
             icon={faArrowLeft}
-            className={`text-xl transition-transform duration-300 ${
+            className={`text-xl transition-transform duration-500 ${
               toggle ? "" : "scale-x-[-1]"
             }`}
           />
