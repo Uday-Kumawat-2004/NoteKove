@@ -16,11 +16,11 @@ export default function SideDrawer() {
         <button
           type="button"
           onClick={() => setToggle((prev) => !prev)}
-          className="w-[40px] bg-[#1f3a3b] mb-5 border-2 border-[#3c6e71] h-[40px] flex items-center justify-center cursor-pointer relative overflow-hidden transition-all duration-500 ease-in-out hover:scale-95 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-[#3c6e71] before:to-[#3c6e71] before:transition-all before:duration-500 before:ease-in-out before:z-[-1] hover:before:left-0 text-[#fff]"
+          className="w-[40px] mb-5 h-[40px] flex items-center justify-center cursor-pointer relative overflow-hidden  text-[#fff]"
         >
           <FontAwesomeIcon
             icon={faArrowLeft}
-            className={`transition-transform duration-300 ${
+            className={`text-xl transition-transform duration-300 ${
               toggle ? "" : "scale-x-[-1]"
             }`}
           />
@@ -38,23 +38,33 @@ export default function SideDrawer() {
             to={item.path}
             key={index}
             className={({ isActive }) =>
-              ` w-[40px] h-[40px] flex items-center gap-3 p-2  text-white transition-colors ${
+              `
+            group relative ${
+                toggle ? "w-full h-[40px]" : "w-[40px] h-[40px]"
+              } transition-all duration-300 flex items-center gap-3 p-2  text-white ${
                 isActive ? "bg-[#3c6e71]" : "hover:bg-[#284b4c]"
               }`
             }
           >
             <span className=" text-lg">{item.icon}</span>
-            
-              <span
-                className={`text-md whitespace-nowrap origin-left transition-all duration-300 ${
-                  toggle
-                    ? "opacity-100 scale-100 ml-2"
-                    : "opacity-0 scale-0 ml-0"
-                }`}
+
+            <span
+              className={`text-md whitespace-nowrap origin-left transition-all duration-300 ${
+                toggle ? "opacity-100 scale-100 ml-2" : "opacity-0 scale-0 ml-0"
+              }`}
+            >
+              {item.name}
+            </span>
+            {!toggle && (
+              <div
+                className="absolute top-1/2 left-[40px] -translate-y-1/2 
+                 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 
+                 transition-all duration-200 z-50 text-gray-300 
+                  px-3 py-2"
               >
                 {item.name}
-              </span>
-            
+              </div>
+            )}
           </NavLink>
         ))}
       </div>
