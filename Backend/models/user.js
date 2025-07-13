@@ -33,6 +33,13 @@ userSchema.pre('save', async function(next) {
     if(!this.isModified('password')){ return next();}
     this.password = await bcrypt.hash(this.password, 10);
     next();
+
+    userSchema.set('toJSON', {
+    transform: (doc, ret, options) => {
+        delete ret.password;
+        return ret;
+    }
+});
 });
 
 export default mongoose.model('User', userSchema);

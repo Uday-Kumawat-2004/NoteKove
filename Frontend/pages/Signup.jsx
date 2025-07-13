@@ -4,6 +4,7 @@ import axios from "axios";
 
 export default function Signup() {
   const [passNotMatched, setPassNotMatched] = useState(false);
+  const [namelengthErr, setNameLengthErr] = useState(false);
   const [successMessage, setSuccess] = useState({
     success: null,
     message: "",
@@ -19,11 +20,16 @@ export default function Signup() {
   async function handleSubmit(e) {
     e.preventDefault(); // ✅ Prevents page reload & URL pollution
 
-    const name = nameInputRef.current.value;
+    const name = nameInputRef.current.value.trim();
     const email = emailInputRef.current.value;
     const password = passInputRef.current.value;
     const confirmPass = confirmPassInputRef.current.value;
-
+    if (name.length < 2) {
+      setNameLengthErr(true);
+      return;
+    } else {
+      setNameLengthErr(false);
+    }
     if (password !== confirmPass) {
       setPassNotMatched(true);
       return;
@@ -112,6 +118,7 @@ export default function Signup() {
                 label: "Name",
                 type: "text",
                 ref: nameInputRef,
+                check: namelengthErr,
               },
               {
                 id: "email",
@@ -168,7 +175,9 @@ export default function Signup() {
                   {field.label}
                 </label>
                 <p className="w-full min-h-[18px] max-h-[50px] mb-[4px] text-[#e56b6f]">
-                  {field.id === "confirmPass" && passNotMatched
+                  {field.id === "name" && namelengthErr
+                    ? "Name must be at least 2 characters"
+                    : field.id === "confirmPass" && passNotMatched
                     ? "Please make sure both passwords are the same."
                     : field.id === "email" &&
                       (successMessage.id === 1 || successMessage.id === 2)
