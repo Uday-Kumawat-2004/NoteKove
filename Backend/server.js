@@ -6,6 +6,7 @@ import signup from './routes/auth/signup.js'
 import cookieParser from 'cookie-parser';
 import signin from './routes/auth/signin.js'
 import { protect } from './middlewares/authMiddleware.js';
+import noteRoutes from './routes/auth/noteRoutes.js'
 dotenv.config();
 const app= express();
 app.use(cors({
@@ -19,11 +20,8 @@ await connectDB();
 
 app.use('/api/users', signup);
 app.use('/api/users', signin);
-app.get('/api/protected', protect, (req, res) => {
-  res.status(200).json({
-    message: `Hello ${req.user.userId}, you're authenticated!`,
-  });
-});
+app.use(protect);
+app.use('/api/createNote', noteRoutes);
 
 const Port = process.env.Port || 5000;
 app.listen(Port, ()=>(

@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { trim } from "validator";
 
 const noteSchema = new mongoose.Schema(
   {
