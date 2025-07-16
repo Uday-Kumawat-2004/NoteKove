@@ -1,18 +1,18 @@
-import "./App.css";
-import SideDrawer from "./componets/SideDrawer";
-import { BrowserRouter } from "react-router-dom";
-import Header from "./componets/Header";
-import Home from "../pages/Home";
+// import "./App.css";
+// import SideDrawer from "./componets/SideDrawer";
+// import { BrowserRouter } from "react-router-dom";
+// import Header from "./componets/Header";
+// import Home from "../pages/Home";
 
-function Test() {
-  return (
-    <>
-      <BrowserRouter>
+// function Test() {
+//   return (
+//     <>
+//       <BrowserRouter>
         
-        <Home/>
-      </BrowserRouter>
-    </>
-  );
-}
+//         <Home/>
+//       </BrowserRouter>
+//     </>
+//   );
+// }
 
-export default Test;
+// export default Test;

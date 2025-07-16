@@ -1,5 +1,6 @@
-import SideDrawer from "../componets/SideDrawer";
-import Header from "../componets/Header";
+import Header from "../components/Header";
+import SideDrawer from "../components/SideDrawer";
+
 export default function Home() {
   return (
     <div className="h-screen flex flex-col overflow-hidden">
