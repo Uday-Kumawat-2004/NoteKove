@@ -3,6 +3,7 @@ import { faSquareCheck } from "@fortawesome/free-regular-svg-icons";
 import { faThumbtack, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useRef, useState } from "react";
 import BgOptions from "./NoteInputCompo/BgOptions";
+import LabelsDiv from "./NoteInputCompo/labelsDiv";
 
 export default function NoteInput() {
   const [toggle, setToggle] = useState(false);
@@ -10,6 +11,7 @@ export default function NoteInput() {
   const [pin, setPin] = useState(false);
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState("#3c6e71");
+  const [islabelOpen, setIsLabelOpen] = useState(false);
 
   const noteRef = useRef(null);
   const titleRef = useRef(null);
@@ -61,10 +63,10 @@ export default function NoteInput() {
   maxLength={150}
 />
 
-    <div className="flex justify-center items-center relative group mr-2 transition-all duration-300 ease-in-out">
+    <div className="flex justify-center  relative group mr-2 transition-all duration-300 ease-in-out">
       <button
         onClick={() => setPin((pin) => !pin)}
-        className="flex items-center justify-center cursor-pointer p-1 ml-2 transition duration-300 ease-in-out"
+        className="flex  justify-center cursor-pointer p-1 ml-2 transition duration-300 ease-in-out"
       >
         <FontAwesomeIcon
           icon={faThumbtack}
@@ -77,7 +79,7 @@ export default function NoteInput() {
         {!pin ? "Pin" : "Unpin"}
       </div>
     </div>
-    <div className="flex justify-center items-center relative group transition-all duration-300 ease-in-out">
+    <div className="flex justify-center  relative group transition-all duration-300 ease-in-out">
       <button
         onClick={() => {
           setToggle(false);
@@ -92,7 +94,7 @@ export default function NoteInput() {
           setBackgroundColor("#3c6e71");
           setIsPaletteOpen(false);
         }}
-        className="flex items-center justify-center cursor-pointer  p-1 ml-2 transition duration-300 ease-in-out"
+        className="flex  justify-center cursor-pointer  p-1 ml-2 transition duration-300 ease-in-out"
       >
         <FontAwesomeIcon
           icon={faXmark}
@@ -128,6 +130,12 @@ export default function NoteInput() {
           handleExpansion();
         }}
       />
+      {
+        toggle && (
+          <LabelsDiv/>
+        )
+      }
+
 
       {!toggle && (
         <div className="relative group ml-2 transition-all duration-300 ease-in-out">
