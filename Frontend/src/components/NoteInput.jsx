@@ -37,7 +37,8 @@ export default function NoteInput() {
     <div
       className={`flex ${
         toggle && "flex-col gap-2 border   border-gray-300"
-      } items-center p-1.5 shadow-sm shadow-[#1b2828] w-[600px] h-auto transition-all duration-300 ease-in-out border border-gray-300 transition-border bg-[#3c6e71]`}
+      } items-center p-1.5 shadow-sm shadow-[#1b2828] w-[600px] h-auto transition-all duration-300 ease-in-out border border-gray-300 transition-border`}
+      style={{ backgroundColor }}
     >
       {toggle && (
         <div className="flex flex-1 w-full h-auto transition-all duration-300 ease-in-out">
@@ -50,7 +51,7 @@ export default function NoteInput() {
           <div className="flex justify-center items-center relative group mr-2 transition-all duration-300 ease-in-out">
             <button
               onClick={() => setPin((pin) => !pin)}
-              className="flex items-center justify-center cursor-pointer bg-[#3c6e71] p-1 ml-2 transition duration-300 ease-in-out"
+              className="flex items-center justify-center cursor-pointer p-1 ml-2 transition duration-300 ease-in-out"
             >
               <FontAwesomeIcon
                 icon={faThumbtack}
@@ -76,7 +77,7 @@ export default function NoteInput() {
                   titleRef.current.value = "";
                 }
               }}
-              className="flex items-center justify-center cursor-pointer bg-[#3c6e71] p-1 ml-2 transition duration-300 ease-in-out"
+              className="flex items-center justify-center cursor-pointer  p-1 ml-2 transition duration-300 ease-in-out"
             >
               <FontAwesomeIcon
                 icon={faXmark}
@@ -114,7 +115,7 @@ export default function NoteInput() {
 
       {!toggle && (
         <div className="relative group ml-2 transition-all duration-300 ease-in-out">
-          <button className="flex items-center justify-center cursor-pointer bg-[#3c6e71] p-1 transition duration-300 ease-in-out">
+          <button className="flex items-center justify-center cursor-pointer  p-1 transition duration-300 ease-in-out">
             <FontAwesomeIcon
               icon={faSquareCheck}
               className="text-xl text-gray-200 hover:shadow-lg hover:shadow-[#59a4a8] transition duration-300 ease-in-out"
