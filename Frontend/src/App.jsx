@@ -1,13 +1,11 @@
-import "./App.css";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
 import Home from "./pages/Home";
-
-
 function App() {
   return (
-    <div className="w-screen h-screen bg-[#0b212e]">
+    <div className="w-screen h-screen bg-[#07141ce7]">
       <Router>
         <Routes>
           <Route path="/" element={<Signup />} />

@@ -1,6 +1,6 @@
 export default function Header() {
   return (
-    <div className="flex w-screen h-[60px] border-b border-gray-400">
+    <div className="flex w-screen h-[60px] shadow-lg shadow-gray-700">
       <div className="flex items-center basis-1/4 p-2 
       ">
         <div className="relative left-[-18px]">
