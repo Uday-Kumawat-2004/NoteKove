@@ -20,6 +20,16 @@ export default function NoteInput() {
     }
   }
 
+  const handleTitleInput = () => {
+  const textarea = titleRef.current;
+  if (textarea) {
+    textarea.style.height = "auto"; // Reset height
+    textarea.style.height = `${textarea.scrollHeight}px`; // Set new height
+  }
+  
+}
+
+
   function handleExpansion() {
     const text = noteRef.current?.value || "";
     const length = text.length;
@@ -41,56 +51,61 @@ export default function NoteInput() {
       style={{ backgroundColor }}
     >
       {toggle && (
-        <div className="flex flex-1 w-full h-auto transition-all duration-300 ease-in-out">
-          <input
-            ref={titleRef}
-            className="flex-1 bg-transparent text-white text-lg h-[35px] placeholder-gray-200 border-none outline-none focus:outline-none focus:border-none transition-all duration-300 ease-in-out"
-            placeholder="Title"
-            type="text"
-          />
-          <div className="flex justify-center items-center relative group mr-2 transition-all duration-300 ease-in-out">
-            <button
-              onClick={() => setPin((pin) => !pin)}
-              className="flex items-center justify-center cursor-pointer p-1 ml-2 transition duration-300 ease-in-out"
-            >
-              <FontAwesomeIcon
-                icon={faThumbtack}
-                className={`text-lg text-gray-200 ${
-                  pin && "text-yellow-200"
-                }  hover:text-yellow-200 transition duration-300 ease-in-out`}
-              />
-            </button>
-            <div className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out whitespace-nowrap">
-              {!pin ? "Pin" : "Unpin"}
-            </div>
-          </div>
-          <div className="flex justify-center items-center relative group transition-all duration-300 ease-in-out">
-            <button
-              onClick={() => {
-                setToggle(false);
-                setExpansionLevel(0);
-                if (noteRef.current) {
-                  noteRef.current.value = "";
-                  noteRef.current.style.height = "auto";
-                }
-                if (titleRef.current) {
-                  titleRef.current.value = "";
-                }
-                setBackgroundColor("#3c6e71");
-              }}
-              className="flex items-center justify-center cursor-pointer  p-1 ml-2 transition duration-300 ease-in-out"
-            >
-              <FontAwesomeIcon
-                icon={faXmark}
-                className="text-xl text-gray-200 hover:text-red-400 transition duration-300 ease-in-out"
-              />
-            </button>
-            <div className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-6 translate-y-2 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out whitespace-nowrap">
-              Cancel
-            </div>
-          </div>
-        </div>
-      )}
+  <div className="flex flex-1 w-full h-auto transition-all duration-300 ease-in-out">
+    <textarea
+  ref={titleRef}
+  onInput={handleTitleInput}
+  className="flex-1 bg-transparent text-white text-lg max-h-[300px] overflow-y-auto placeholder-gray-200 border-none outline-none focus:outline-none transition-all duration-300 ease-in-out resize-none"
+  placeholder="Title"
+  rows={1}
+  maxLength={150}
+/>
+
+    <div className="flex justify-center items-center relative group mr-2 transition-all duration-300 ease-in-out">
+      <button
+        onClick={() => setPin((pin) => !pin)}
+        className="flex items-center justify-center cursor-pointer p-1 ml-2 transition duration-300 ease-in-out"
+      >
+        <FontAwesomeIcon
+          icon={faThumbtack}
+          className={`text-lg text-gray-200 ${
+            pin && "text-yellow-200"
+          }  hover:text-yellow-200 transition duration-300 ease-in-out`}
+        />
+      </button>
+      <div className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out whitespace-nowrap">
+        {!pin ? "Pin" : "Unpin"}
+      </div>
+    </div>
+    <div className="flex justify-center items-center relative group transition-all duration-300 ease-in-out">
+      <button
+        onClick={() => {
+          setToggle(false);
+          setExpansionLevel(0);
+          if (noteRef.current) {
+            noteRef.current.value = "";
+            noteRef.current.style.height = "auto";
+          }
+          if (titleRef.current) {
+            titleRef.current.value = "";
+          }
+          setBackgroundColor("#3c6e71");
+          setIsPaletteOpen(false);
+        }}
+        className="flex items-center justify-center cursor-pointer  p-1 ml-2 transition duration-300 ease-in-out"
+      >
+        <FontAwesomeIcon
+          icon={faXmark}
+          className="text-xl text-gray-200 hover:text-red-400 transition duration-300 ease-in-out"
+        />
+      </button>
+      <div className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-6 translate-y-2 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out whitespace-nowrap">
+        Cancel
+      </div>
+    </div>
+  </div>
+)}
+
 
       <textarea
         ref={noteRef}
