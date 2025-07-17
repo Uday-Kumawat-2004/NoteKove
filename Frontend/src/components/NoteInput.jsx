@@ -76,6 +76,7 @@ export default function NoteInput() {
                 if (titleRef.current) {
                   titleRef.current.value = "";
                 }
+                setBackgroundColor("#3c6e71");
               }}
               className="flex items-center justify-center cursor-pointer  p-1 ml-2 transition duration-300 ease-in-out"
             >
