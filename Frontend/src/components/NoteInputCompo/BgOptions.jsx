@@ -55,13 +55,13 @@ export default function BgOptions({
       </button>
 
       {!isOpen && (
-        <div className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-12 translate-y-16 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out whitespace-nowrap">
-          Background Options
+        <div className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-12 translate-y-7 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover:opacity-100 group-hover:translate-y-14 transition-all duration-300 ease-in-out whitespace-nowrap">
+          Background color
         </div>
       )}
 
       {isOpen && (
-        <div className="absolute bg-[#9da2a3] bottom-full left-1/2 translate-x-4 translate-y-22 mb-1 px-2 py-1 text-gray-200 text-xs rounded transition-all duration-300 ease-in-out whitespace-nowrap">
+        <div className="absolute bg-[#9da2a3] bottom-full left-1/2 translate-x-2 translate-y-18 mb-1 px-2 py-1 text-gray-200 text-xs rounded transition-all duration-300 ease-in-out whitespace-nowrap">
           <div className="flex gap-1 p-0.5 w-auto h-auto">
             {colorOptions.map(({ name, color }, index) => (
               <div
