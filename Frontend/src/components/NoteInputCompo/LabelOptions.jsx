@@ -9,6 +9,7 @@ import { useState } from "react";
 export default function LabelOptions({
   islabelOpen,
   setIsLabelOpen,
+  setIsPaletteOpen,
   onLabelSelect,
   setOnLabelSelect,
   labels,
@@ -26,7 +27,16 @@ export default function LabelOptions({
   return (
     <div className="relative  group ml-2 transition-all duration-300 ease-in-out">
       <button
-        onClick={() => setIsLabelOpen((prev) => !prev)}
+        onClick={() => {
+          setIsLabelOpen((prev) => {
+            const newState = !prev;
+            if (newState) {
+              setIsPaletteOpen(false);
+            }
+            return newState;
+          });
+          setSearch("");
+        }}
         className="flex items-center justify-center cursor-pointer p-1 transition duration-300 ease-in-out"
       >
         <FontAwesomeIcon

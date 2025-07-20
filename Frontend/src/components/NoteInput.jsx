@@ -12,7 +12,7 @@ export default function NoteInput() {
   const [expansionLevel, setExpansionLevel] = useState(0);
   const [pin, setPin] = useState(false);
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
-  const [backgroundColor, setBackgroundColor] = useState("#3c6e71");
+  const [backgroundColor, setBackgroundColor] = useState("");
   const [islabelOpen, setIsLabelOpen] = useState(false);
   const [onLabelSelect, setOnLabelSelect] = useState([]);
   const {
@@ -100,7 +100,7 @@ export default function NoteInput() {
                 if (titleRef.current) {
                   titleRef.current.value = "";
                 }
-                setBackgroundColor("#3c6e71");
+                setBackgroundColor("");
                 setIsPaletteOpen(false);
                 setOnLabelSelect([]);
               }}
@@ -164,6 +164,7 @@ export default function NoteInput() {
           <div className="flex flex-1 gap-2.5">
             <BgOptions
               isOpen={isPaletteOpen}
+              setIsLabelOpen={setIsLabelOpen}
               currentColor={backgroundColor}
               setIsOpen={setIsPaletteOpen}
               onColorSelect={setBackgroundColor}
@@ -171,6 +172,7 @@ export default function NoteInput() {
             <LabelOptions
               islabelOpen={islabelOpen}
               setIsLabelOpen={setIsLabelOpen}
+              setIsPaletteOpen={setIsPaletteOpen}
               onLabelSelect={onLabelSelect}
               setOnLabelSelect={setOnLabelSelect}
               labels={labels}
