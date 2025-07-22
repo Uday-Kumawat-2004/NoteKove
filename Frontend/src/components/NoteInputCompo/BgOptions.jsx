@@ -58,7 +58,7 @@ export default function BgOptions({
         <FontAwesomeIcon
           icon={faPalette}
           className={`text-xl ${
-            isOpen ? "text-gray-300" : "text-gray-200"
+            isOpen ? "text-gray-400" : "text-gray-200"
           } hover:shadow-lg transition duration-300 ease-in-out`}
         />
       </button>

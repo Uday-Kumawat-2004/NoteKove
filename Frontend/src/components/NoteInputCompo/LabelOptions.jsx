@@ -42,7 +42,7 @@ export default function LabelOptions({
         <FontAwesomeIcon
           icon={faTag}
           className={`text-xl ${
-            islabelOpen ? "text-gray-300" : "text-gray-200"
+            islabelOpen ? "text-gray-400" : "text-gray-200"
           } hover:shadow-lg transition duration-300 ease-in-out`}
         />
       </button>

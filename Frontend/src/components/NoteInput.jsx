@@ -1,12 +1,16 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareCheck } from "@fortawesome/free-regular-svg-icons";
-import { faThumbtack, faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faThumbtack,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { useRef, useState } from "react";
 import BgOptions from "./NoteInputCompo/BgOptions";
 import LabelsDiv from "./NoteInputCompo/labelsDiv";
 import LabelOptions from "./NoteInputCompo/LabelOptions";
 import useGetLabels from "../hooks/useGetLabels";
 import ListArea from "./NoteInputCompo/ListArea";
+import Archive from "./NoteInputCompo/Archive";
 
 export default function NoteInput() {
   const [toggle, setToggle] = useState(false);
@@ -24,6 +28,7 @@ export default function NoteInput() {
   console.log(onLabelSelect);
   const [isListOpen, setIsListOpen] = useState(false);
   const [checklist, setChecklist] = useState([{ text: "", done: false }]);
+  const [archived, setArchived] = useState(false);
 
   const noteRef = useRef(null);
   const titleRef = useRef(null);
@@ -48,7 +53,7 @@ export default function NoteInput() {
 
     if (length <= 300) {
       setExpansionLevel(0);
-    }else if (length <= 600) {
+    } else if (length <= 600) {
       setExpansionLevel(1);
     } else if (length > 600 && length <= 900) {
       setExpansionLevel(2);
@@ -106,7 +111,8 @@ export default function NoteInput() {
                 setBackgroundColor("");
                 setIsPaletteOpen(false);
                 setOnLabelSelect([]);
-                setIsListOpen(false)
+                setIsListOpen(false);
+                setChecklist([{ text: "", done: false }]);
               }}
               className="flex  justify-center cursor-pointer  p-1 ml-2 transition duration-300 ease-in-out"
             >
@@ -122,12 +128,13 @@ export default function NoteInput() {
         </div>
       )}
 
-      {!isListOpen && <textarea
-        ref={noteRef}
-        onClick={handleToggle}
-        rows={1}
-        placeholder="Take a note..."
-        className={`flex-1 w-full text-white placeholder-gray-200 border-none outline-none bg-transparent
+      {!isListOpen && (
+        <textarea
+          ref={noteRef}
+          onClick={handleToggle}
+          rows={1}
+          placeholder="Take a note..."
+          className={`flex-1 w-full text-white placeholder-gray-200 border-none outline-none bg-transparent
           ${
             toggle && expansionLevel === 0
               ? "min-h-[150px]"
@@ -135,31 +142,31 @@ export default function NoteInput() {
               ? "min-h-[250px]"
               : toggle && expansionLevel === 2
               ? "min-h-[375px]"
-              :toggle && expansionLevel === 3
+              : toggle && expansionLevel === 3
               ? "min-h-[500px]"
               : "min-h-auto"
           } overflow-y-auto resize-none transition-all duration-300 ease-in-out`}
-        onInput={(e) => {
-          e.target.style.height = "auto";
-          e.target.style.height = `${e.target.scrollHeight}px`;
-          handleExpansion();
-        }}
-      />}
-      {
-        isListOpen && <ListArea
-        checklist={checklist}
-        setChecklist={setChecklist}
+          onInput={(e) => {
+            e.target.style.height = "auto";
+            e.target.style.height = `${e.target.scrollHeight}px`;
+            handleExpansion();
+          }}
         />
-      }
-      {toggle && <LabelsDiv 
-      onLabelSelect={onLabelSelect}
-      />}
+      )}
+      {isListOpen && (
+        <ListArea checklist={checklist} setChecklist={setChecklist} />
+      )}
+      {toggle && <LabelsDiv onLabelSelect={onLabelSelect} />}
 
       {!toggle && (
         <div className="relative group ml-2 transition-all duration-300 ease-in-out">
-          <button 
-          onClick={() => {setIsListOpen((prev) => !prev); setToggle((prev) => (!prev))}}
-          className="flex items-center justify-center cursor-pointer  p-1 transition duration-300 ease-in-out">
+          <button
+            onClick={() => {
+              setIsListOpen((prev) => !prev);
+              setToggle((prev) => !prev);
+            }}
+            className="flex items-center justify-center cursor-pointer  p-1 transition duration-300 ease-in-out"
+          >
             <FontAwesomeIcon
               icon={faSquareCheck}
               className="text-xl text-gray-200 hover:shadow-lg hover:shadow-[#59a4a8] transition duration-300 ease-in-out"
@@ -173,7 +180,7 @@ export default function NoteInput() {
 
       {toggle && (
         <div className="flex w-full items-center transition-all duration-300 ease-in-out">
-          <div className="flex flex-1 gap-2.5">
+          <div className="flex flex-1 items-center gap-2.5">
             <BgOptions
               isOpen={isPaletteOpen}
               setIsLabelOpen={setIsLabelOpen}
@@ -190,6 +197,10 @@ export default function NoteInput() {
               labels={labels}
               loading={labelLoading}
               error={labelError}
+            />
+            <Archive
+            archived={archived}
+            setArchived={setArchived}
             />
           </div>
 

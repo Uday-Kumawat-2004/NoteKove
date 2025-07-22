@@ -3,13 +3,13 @@ import { faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export default function ListArea({ checklist, setChecklist }) {
   return (
-    <div className="w-full">
+    <div className="w-full overflow-y-auto max-h-[480px]">
       {checklist.map((item, index) => (
         <div
           key={index}
-          className="flex items-center w-full gap-2 border-t border-b pt-1.5 pb-1.5 border-gray-200"
+          className="flex items-center w-full gap-2 border-t border-b pt-1.5 pb-1.5 border-gray-200 overflow-y-auto max-h-[400px]"
         >
-          <div className="ml-2">
+          <div className="ml-2 mr-1.5">
             <label className="inline-flex items-center cursor-pointer select-none">
               <input
                 type="checkbox"
@@ -55,7 +55,7 @@ export default function ListArea({ checklist, setChecklist }) {
                 updated[index].text = e.target.value;
                 setChecklist(updated);
               }}
-              placeholder="Take a note..."
+              
               className="w-full text-white placeholder-gray-200 border-none outline-none bg-transparent overflow-y-auto resize-none transition-all duration-300 ease-in-out"
               onInput={(e) => {
                 e.target.style.height = "auto";
