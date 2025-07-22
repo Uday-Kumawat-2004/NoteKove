@@ -6,6 +6,7 @@ import BgOptions from "./NoteInputCompo/BgOptions";
 import LabelsDiv from "./NoteInputCompo/labelsDiv";
 import LabelOptions from "./NoteInputCompo/LabelOptions";
 import useGetLabels from "../hooks/useGetLabels";
+import ListArea from "./NoteInputCompo/ListArea";
 
 export default function NoteInput() {
   const [toggle, setToggle] = useState(false);
@@ -21,6 +22,8 @@ export default function NoteInput() {
     loading: labelLoading,
   } = useGetLabels("http://localhost:4000/api/createLabel");
   console.log(onLabelSelect);
+  const [isListOpen, setIsListOpen] = useState(false);
+  const [checklist, setChecklist] = useState([{ text: "", done: false }]);
 
   const noteRef = useRef(null);
   const titleRef = useRef(null);
@@ -103,6 +106,7 @@ export default function NoteInput() {
                 setBackgroundColor("");
                 setIsPaletteOpen(false);
                 setOnLabelSelect([]);
+                setIsListOpen(false)
               }}
               className="flex  justify-center cursor-pointer  p-1 ml-2 transition duration-300 ease-in-out"
             >
@@ -118,7 +122,7 @@ export default function NoteInput() {
         </div>
       )}
 
-      <textarea
+      {!isListOpen && <textarea
         ref={noteRef}
         onClick={handleToggle}
         rows={1}
@@ -140,14 +144,22 @@ export default function NoteInput() {
           e.target.style.height = `${e.target.scrollHeight}px`;
           handleExpansion();
         }}
-      />
+      />}
+      {
+        isListOpen && <ListArea
+        checklist={checklist}
+        setChecklist={setChecklist}
+        />
+      }
       {toggle && <LabelsDiv 
       onLabelSelect={onLabelSelect}
       />}
 
       {!toggle && (
         <div className="relative group ml-2 transition-all duration-300 ease-in-out">
-          <button className="flex items-center justify-center cursor-pointer  p-1 transition duration-300 ease-in-out">
+          <button 
+          onClick={() => {setIsListOpen((prev) => !prev); setToggle((prev) => (!prev))}}
+          className="flex items-center justify-center cursor-pointer  p-1 transition duration-300 ease-in-out">
             <FontAwesomeIcon
               icon={faSquareCheck}
               className="text-xl text-gray-200 hover:shadow-lg hover:shadow-[#59a4a8] transition duration-300 ease-in-out"
