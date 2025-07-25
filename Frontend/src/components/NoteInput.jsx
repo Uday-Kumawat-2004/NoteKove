@@ -1,9 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareCheck } from "@fortawesome/free-regular-svg-icons";
-import {
-  faThumbtack,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { faThumbtack, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useRef, useState } from "react";
 import BgOptions from "./NoteInputCompo/BgOptions";
 import LabelsDiv from "./NoteInputCompo/labelsDiv";
@@ -11,6 +8,9 @@ import LabelOptions from "./NoteInputCompo/LabelOptions";
 import useGetLabels from "../hooks/useGetLabels";
 import ListArea from "./NoteInputCompo/ListArea";
 import Archive from "./NoteInputCompo/Archive";
+import Reminder from "./NoteInputCompo/Reminder";
+import RichTextEditor from "./NoteInputCompo/RichTextEditor";
+import axios from "axios";
 
 export default function NoteInput() {
   const [toggle, setToggle] = useState(false);
@@ -20,17 +20,25 @@ export default function NoteInput() {
   const [backgroundColor, setBackgroundColor] = useState("");
   const [islabelOpen, setIsLabelOpen] = useState(false);
   const [onLabelSelect, setOnLabelSelect] = useState([]);
+  const [isListOpen, setIsListOpen] = useState(false);
+  const [checklist, setChecklist] = useState([{ text: "", done: false }]);
+  const [archived, setArchived] = useState(false);
+  const [isRemiderOpen, setIsReminderOpen] = useState(false);
+  const [reminderDate, setReminderDate] = useState("");
+  const [title, setTitle] = useState("");
+  const [noteContent, setNoteContent] = useState({
+    raw: null,
+    plainText: "",
+    length: 0,
+  });
+  const[editorKey, setEditorKey] = useState("")
+  const [isSaving, setIsSaving] = useState(false);
   const {
     data: labels,
     error: labelError,
     loading: labelLoading,
   } = useGetLabels("http://localhost:4000/api/createLabel");
   console.log(onLabelSelect);
-  const [isListOpen, setIsListOpen] = useState(false);
-  const [checklist, setChecklist] = useState([{ text: "", done: false }]);
-  const [archived, setArchived] = useState(false);
-
-  const noteRef = useRef(null);
   const titleRef = useRef(null);
 
   function handleToggle() {
@@ -47,20 +55,86 @@ export default function NoteInput() {
     }
   };
 
-  function handleExpansion() {
-    const text = noteRef.current?.value || "";
-    const length = text.length;
-
-    if (length <= 300) {
+  function handleExpansion(length) {
+    if (length <= 250) {
       setExpansionLevel(0);
     } else if (length <= 600) {
       setExpansionLevel(1);
-    } else if (length > 600 && length <= 900) {
+    } else if (length <= 1200) {
       setExpansionLevel(2);
     } else {
       setExpansionLevel(3);
     }
   }
+
+  const handleContentChange = (content) => {
+    setNoteContent(content);
+  };
+
+  const saveNote = async () => {
+    setIsSaving(true);
+
+    try {
+      const reminders = reminderDate ? [new Date(reminderDate)] : [];
+
+      const noteData = {
+        title: title.trim(),
+        content: noteContent,
+        checklist: isListOpen
+          ? checklist.filter((item) => item.text.trim())
+          : [],
+        noteType: isListOpen ? "checklist" : "text",
+        color: backgroundColor || "transparent",
+        labels: onLabelSelect,
+        pinned: pin,
+        archived: archived,
+        reminders: reminders,
+      };
+
+      const res = await axios.post(
+        "http://localhost:4000/api/notes",
+        noteData,
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (res.data.success) {
+        console.log("Note saved successfully");
+        alert("Note saved successfully!");
+        resetForm();
+      }
+    } catch (err) {
+      console.log("Error in savong note: ", err);
+      if (err.response) {
+        alert(`Failed to save note: ${err.response.data.err}`);
+      } else {
+        alert("Failed to save note. Please check your connection.");
+      }
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const resetForm = () => {
+    setToggle(false);
+    setExpansionLevel(0);
+    setTitle("");
+    setNoteContent({ raw: null, plainText: "", length: 0 });
+    setEditorKey((prev) => prev + 1);
+    if (titleRef.current) {
+      titleRef.current.value = "";
+      titleRef.current.style.height = "auto";
+    }
+    setBackgroundColor("");
+    setIsPaletteOpen(false);
+    setOnLabelSelect([]);
+    setIsListOpen(false);
+    setChecklist([{ text: "", done: false }]);
+    setReminderDate("");
+    setPin(false);
+    setArchived(false);
+  };
 
   return (
     <div
@@ -73,7 +147,10 @@ export default function NoteInput() {
         <div className="flex flex-1 w-full h-auto transition-all duration-300 ease-in-out">
           <textarea
             ref={titleRef}
-            onInput={handleTitleInput}
+            onChange={(e) => {
+              setTitle(e.target.value);
+              handleTitleInput();
+            }}
             className="flex-1 bg-transparent text-white text-lg max-h-[300px] overflow-y-auto placeholder-gray-200 border-none outline-none focus:outline-none transition-all duration-300 ease-in-out resize-none"
             placeholder="Title"
             rows={1}
@@ -98,22 +175,7 @@ export default function NoteInput() {
           </div>
           <div className="flex justify-center  relative group transition-all duration-300 ease-in-out">
             <button
-              onClick={() => {
-                setToggle(false);
-                setExpansionLevel(0);
-                if (noteRef.current) {
-                  noteRef.current.value = "";
-                  noteRef.current.style.height = "auto";
-                }
-                if (titleRef.current) {
-                  titleRef.current.value = "";
-                }
-                setBackgroundColor("");
-                setIsPaletteOpen(false);
-                setOnLabelSelect([]);
-                setIsListOpen(false);
-                setChecklist([{ text: "", done: false }]);
-              }}
+              onClick={resetForm}
               className="flex  justify-center cursor-pointer  p-1 ml-2 transition duration-300 ease-in-out"
             >
               <FontAwesomeIcon
@@ -129,30 +191,16 @@ export default function NoteInput() {
       )}
 
       {!isListOpen && (
-        <textarea
-          ref={noteRef}
-          onClick={handleToggle}
-          rows={1}
-          placeholder="Take a note..."
-          className={`flex-1 w-full text-white placeholder-gray-200 border-none outline-none bg-transparent
-          ${
-            toggle && expansionLevel === 0
-              ? "min-h-[150px]"
-              : toggle && expansionLevel === 1
-              ? "min-h-[250px]"
-              : toggle && expansionLevel === 2
-              ? "min-h-[375px]"
-              : toggle && expansionLevel === 3
-              ? "min-h-[500px]"
-              : "min-h-auto"
-          } overflow-y-auto resize-none transition-all duration-300 ease-in-out`}
-          onInput={(e) => {
-            e.target.style.height = "auto";
-            e.target.style.height = `${e.target.scrollHeight}px`;
-            handleExpansion();
-          }}
+        <RichTextEditor
+          key={editorKey}
+          expansionLevel={expansionLevel}
+          toggle={toggle}
+          handleToggle={handleToggle}
+          handleExpansion={handleExpansion}
+          onContentChange={handleContentChange}
         />
       )}
+
       {isListOpen && (
         <ListArea checklist={checklist} setChecklist={setChecklist} />
       )}
@@ -198,17 +246,22 @@ export default function NoteInput() {
               loading={labelLoading}
               error={labelError}
             />
-            <Archive
-            archived={archived}
-            setArchived={setArchived}
+            <Archive archived={archived} setArchived={setArchived} />
+            <Reminder
+              isRemiderOpen={isRemiderOpen}
+              setIsReminderOpen={setIsReminderOpen}
+              reminderDate={reminderDate}
+              setReminderDate={setReminderDate}
             />
           </div>
 
           <button
             type="button"
+            onClick={saveNote}
+            disabled={isSaving}
             className="w-[80px] border-2 border-[#38caef] h-[30px] flex items-center justify-center cursor-pointer relative overflow-hidden transition-all duration-300 ease-in-out hover:scale-95 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-[#38caef] before:to-[#38caef] before:transition-all before:duration-300 before:ease-in-out before:z-[-1] hover:before:left-0 text-gray-100"
           >
-            Save
+            {isSaving ? "Saving..." : "Save"}
           </button>
         </div>
       )}

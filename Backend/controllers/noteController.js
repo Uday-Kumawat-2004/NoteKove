@@ -1,16 +1,15 @@
-
+import { json } from "express";
 import Note from "../models/note.js";
 
-
-async function createNote (req, res)  {
+export async function createNote(req, res) {
   try {
     const {
       title,
       content,
       checklist,
+      noteType,
       color,
       labels,
-      collaborators,
       pinned,
       archived,
       trashed,
@@ -26,9 +25,9 @@ async function createNote (req, res)  {
       title,
       content,
       checklist,
+      noteType,
       color,
       labels,
-      collaborators,
       pinned,
       archived,
       trashed,
@@ -43,4 +42,77 @@ async function createNote (req, res)  {
   }
 }
 
-export default createNote;
+export async function getUserNotes(req, res) {
+  try {
+    const userId = req.user?._id || req.body.user;
+    console.log(userId);
+    const notes = await Note.findByUser(userId);
+
+    res.status(201).json({
+      success: true,
+      notes,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "Failed to fetch notes",
+      details: err.message,
+    });
+  }
+}
+
+export async function updateNote(req, res) {
+  try {
+    const { id } = req.params;
+    const userId = req.user._id;
+    const updateData = req.body;
+
+    const note = await Note.findOneAndUpdate(
+      { _id: id, user: userId },
+      updateData,
+      { new: true }
+    );
+
+    if (!note) {
+      return response.status(404).json({
+        error: "Note not found",
+      });
+    }
+
+    res.status(201).json({
+      success: true,
+      message: "Note updated successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "Failed updated successfully",
+      details: err.message,
+    });
+  }
+}
+
+export async function deleteNote(req, res) {
+  try {
+    const { id } = req.params;
+    const userId = req.user._id;
+    console.log('Received DELETE for note', id, 'by user', userId);
+    const note = await Note.findOneAndUpdate(
+      { _id: id, user: userId },
+      { trashed: true },
+      { new: true }
+    );
+     console.log('Query result:', note);
+    if (!note) {
+      return res.status(404).json({ error: "Note not found" });
+    }
+
+    res.json({
+      success: true,
+      message: "Note moved to trash",
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: "Failed to delete note",
+      details: error.message,
+    });
+  }
+}

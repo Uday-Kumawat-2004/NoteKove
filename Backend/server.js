@@ -22,7 +22,7 @@ await connectDB();
 app.use('/api/users', signup);
 app.use('/api/users', signin);
 app.use(protect);
-app.use('/api/createNote', noteRoutes);
+app.use('/api', noteRoutes);
 app.use('/api/createLabel', labelRoute);
 
 const Port = process.env.Port || 5000;
