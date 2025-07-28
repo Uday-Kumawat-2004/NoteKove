@@ -8,7 +8,7 @@ export default function LabelsDiv({
           return(
             <div
             key={item._id}
-            className=" text-sm border-2 font-medium border-[#cac4ce] p-2 text-[#cac4ce] rounded-2xl items-center"
+            className=" text-sm border-2 font-medium border-[#cac4ce] px-2 py-1 text-[#cac4ce] rounded-2xl items-centerr"
             >
               {item.name}
             </div>

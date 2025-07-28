@@ -46,7 +46,7 @@ export async function getUserNotes(req, res) {
   try {
     const userId = req.user?._id || req.body.user;
     console.log(userId);
-    const notes = await Note.findByUser(userId);
+    const notes = await Note.findByUser(userId).populate("labels");
 
     res.status(201).json({
       success: true,
@@ -94,13 +94,13 @@ export async function deleteNote(req, res) {
   try {
     const { id } = req.params;
     const userId = req.user._id;
-    console.log('Received DELETE for note', id, 'by user', userId);
+    console.log("Received DELETE for note", id, "by user", userId);
     const note = await Note.findOneAndUpdate(
       { _id: id, user: userId },
       { trashed: true },
       { new: true }
     );
-     console.log('Query result:', note);
+    console.log("Query result:", note);
     if (!note) {
       return res.status(404).json({ error: "Note not found" });
     }

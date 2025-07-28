@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 const noteSchema = new mongoose.Schema(
   {
     user: {
@@ -13,7 +12,7 @@ const noteSchema = new mongoose.Schema(
       type: String,
       default: "",
       trim: true,
-      maxLength: 150,
+      maxLength: 250,
     },
     content: {
       raw: {
@@ -63,11 +62,11 @@ const noteSchema = new mongoose.Schema(
     },
     labels: [
       {
-        type: String,
-        trim: true,
-        maxLength: 50,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Label",
       },
     ],
+
     pinned: {
       type: Boolean,
       default: false,
@@ -102,7 +101,9 @@ noteSchema.statics.findByUser = function (userId, options = {}) {
     trashed: false,
     ...options,
   };
-  return this.find(query).sort({ pinned: -1, updatedAt: -1 });
+    return this.find(query)
+    .populate("labels")
+    .sort({ pinned: -1, updatedAt: -1 });
 };
 
 noteSchema.statics.findArchivedByUser = function (userId) {

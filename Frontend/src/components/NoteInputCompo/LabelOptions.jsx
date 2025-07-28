@@ -21,9 +21,6 @@ export default function LabelOptions({
   const filteredLabels = labels?.filter((label) =>
     label.name.toLowerCase().includes(search.toLowerCase())
   );
-  console.log(labels);
-  if (error) return <p>Error fetching labels: {error.message}</p>;
-
   return (
     <div className="relative  group ml-2 transition-all duration-300 ease-in-out">
       <button

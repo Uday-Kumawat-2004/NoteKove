@@ -153,7 +153,7 @@ export default function ListArea({ checklist, setChecklist }) {
                 setChecklist(updated);
               }}
               
-              className="w-full text-gray-400 border-none outline-none bg-transparent overflow-y-auto resize-none transition-all duration-300 ease-in-out"
+              className="w-full text-gray-400 border-none outline-none bg-transparent overflow-y-auto resize-none transition-all duration-300 ease-in-out line-through"
               onInput={(e) => {
                 e.target.style.height = "auto";
                 e.target.style.height = `${e.target.scrollHeight}px`;

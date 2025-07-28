@@ -78,7 +78,7 @@ export default function RichTextEditor({
         className={`
           ${
             toggle && expansionLevel === 0
-              ? "min-h-auto"
+              ? "min-h-[35px]"
               : toggle && expansionLevel === 1
               ? "min-h-[250px]"
               : toggle && expansionLevel === 2
@@ -103,7 +103,7 @@ export default function RichTextEditor({
 
       {toggle && (
         <div
-        className="flex justify-center pb-1.5 border-b border-gray-400 mb-1"
+        className="flex justify-center pb-1.5 border-b border-gray-400 mb-1 mt-3.5"
         >
           <div className="flex flex-wrap gap-2 ">
             {/* Text Formatting */}

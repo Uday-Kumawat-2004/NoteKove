@@ -1,6 +1,7 @@
 import Header from "../components/Header";
 import SideDrawer from "../components/SideDrawer";
 import NoteInput from "../components/NoteInput";
+import NotesBoard from "../components/NotesBoard";
 
 export default function Home() {
   return (
@@ -22,7 +23,9 @@ export default function Home() {
               <NoteInput/>
             
           </div>
-          <div></div>
+          <div className=" flex justify-center items-center w-full h-auto">
+            <NotesBoard/>
+          </div>
         </div>
       </div>
     </div>

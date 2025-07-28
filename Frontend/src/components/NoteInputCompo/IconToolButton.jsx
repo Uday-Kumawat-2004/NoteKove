@@ -40,7 +40,7 @@ export default function IconToolButton({
       </button>
       
       {tooltip && showTooltip && (
-        <div className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-1/2 -translate-y-2 mb-1 px-2 py-1 text-gray-200 text-xs rounded transition-all duration-300 ease-in-out whitespace-nowrap z-50">
+        <div className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-1/2 -translate-y-0  mb-1 px-2 py-1 text-gray-200 text-xs rounded transition-all duration-300 ease-in-out whitespace-nowrap z-50">
           {tooltip}
         </div>
       )}

@@ -129,6 +129,7 @@ export default function NoteInput() {
     setBackgroundColor("");
     setIsPaletteOpen(false);
     setOnLabelSelect([]);
+    setIsReminderOpen(false);
     setIsListOpen(false);
     setChecklist([{ text: "", done: false }]);
     setReminderDate("");
@@ -140,7 +141,7 @@ export default function NoteInput() {
     <div
       className={`flex ${
         toggle && "flex-col gap-2 border   border-gray-300"
-      } items-center p-1.5 shadow-sm shadow-[#1b2828] w-[600px] h-auto transition-all duration-300 ease-in-out border border-gray-300 transition-border`}
+      } items-center p-1.5 shadow-sm shadow-[#1b2828] w-[750px] h-auto transition-all duration-300 ease-in-out border border-gray-300 transition-border`}
       style={{ backgroundColor }}
     >
       {toggle && (
@@ -151,10 +152,10 @@ export default function NoteInput() {
               setTitle(e.target.value);
               handleTitleInput();
             }}
-            className="flex-1 bg-transparent text-white text-lg max-h-[300px] overflow-y-auto placeholder-gray-200 border-none outline-none focus:outline-none transition-all duration-300 ease-in-out resize-none"
+            className="flex-1 bg-transparent text-white text-lg  overflow-y-auto placeholder-gray-200 border-none outline-none focus:outline-none transition-all duration-300 ease-in-out resize-none"
             placeholder="Title"
             rows={1}
-            maxLength={150}
+            maxLength={250}
           />
 
           <div className="flex justify-center  relative group mr-2 transition-all duration-300 ease-in-out">
@@ -164,9 +165,9 @@ export default function NoteInput() {
             >
               <FontAwesomeIcon
                 icon={faThumbtack}
-                className={`text-lg text-gray-200 ${
-                  pin && "text-yellow-200"
-                }  hover:text-yellow-200 transition duration-300 ease-in-out`}
+                className={`text-lg  ${
+                  pin ? "text-gray-200" : "text-gray-400"
+                }  hover:text-gray-300 transition duration-300 ease-in-out`}
               />
             </button>
             <span className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-1/2 translate-y-7 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-in-out whitespace-nowrap">
@@ -217,7 +218,7 @@ export default function NoteInput() {
           >
             <FontAwesomeIcon
               icon={faSquareCheck}
-              className="text-xl text-gray-200 hover:shadow-lg hover:shadow-[#59a4a8] transition duration-300 ease-in-out"
+              className="text-xl text-gray-200 hover:shadow-lg  transition duration-300 ease-in-out"
             />
           </button>
           <span className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-1/2 translate-y-7 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-in-out whitespace-nowrap">
