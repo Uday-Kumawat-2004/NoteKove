@@ -76,7 +76,11 @@ export default function LabelOptions({
           />
           <div className="mt-6 overflow-y-auto max-h-[200px]">
             <h2 className="text-xs text-gray-400 mb-2">All labels</h2>
-            {loading && <p className="text-gray-500 text-sm">Loading...</p>}
+            {loading && (
+              <div className="flex justify-center items-center h-[200px]">
+                <div className="w-10 h-10 border-4 border-t-gray-300 border-gray-400 rounded-full animate-spin"></div>
+              </div>
+            )}
             {error && (
               <p className="text-red-500 text-sm">Failed to load labels</p>
             )}

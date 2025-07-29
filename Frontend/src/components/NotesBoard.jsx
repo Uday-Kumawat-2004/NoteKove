@@ -1,9 +1,9 @@
-import useGetNotes from "../hooks/useGetNotes";
+import { useGetNotes } from "../hooks/useNoteApi";
 import NoteCard from "./NoteBoardCompo/NoteCard";
 
 export default function NotesBoard() {
   const { data, error, loading } = useGetNotes("http://localhost:4000/api/notes");
-
+  console.log(data);
   if (loading) {
     return (
       <div className="flex justify-center items-center h-[200px]">
@@ -28,12 +28,12 @@ export default function NotesBoard() {
     );
   }
 
-  const pinnedNotes = data.filter((item) => item.pinned);
-  const otherNotes = data.filter((item) => !item.pinned);
+  const pinnedNotes = data.filter((item) => item.pinned && !item.trashed);
+  const otherNotes = data.filter((item) => !item.pinned && !item.trashed);
 
   return (
     <div className="flex flex-col justify-center items-center w-full h-auto">
-      {pinnedNotes.length > 0 && (
+      {pinnedNotes.length > 0 &&  (
         <>
           <h2 className="text-xs font-bold tracking-wide w-[750px] text-gray-300 mb-4 mt-10">
             PINNED
