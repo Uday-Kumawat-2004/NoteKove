@@ -7,7 +7,14 @@ import {
   faRedo,
   faStrikethrough,
 } from "@fortawesome/free-solid-svg-icons";
-import { Editor, EditorState, RichUtils, convertToRaw, getDefaultKeyBinding } from "draft-js";
+import {
+  Editor,
+  EditorState,
+  RichUtils,
+  convertToRaw,
+  getDefaultKeyBinding,
+  convertFromRaw,
+} from "draft-js";
 import "draft-js/dist/Draft.css";
 import IconToolButton from "./IconToolButton";
 
@@ -17,8 +24,26 @@ export default function RichTextEditor({
   handleToggle,
   handleExpansion,
   onContentChange,
+  initialContent,
 }) {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+const [editorState, setEditorState] = useState(() => {
+  if (initialContent?.raw && Array.isArray(initialContent.raw.blocks)) {
+    try {
+      const rawWithSafeEntityMap = {
+        blocks: initialContent.raw.blocks,
+        entityMap: initialContent.raw.entityMap || {}, // ensure it's always defined
+      };
+
+      const contentState = convertFromRaw(rawWithSafeEntityMap);
+      return EditorState.createWithContent(contentState);
+    } catch (e) {
+      console.error("Failed to load editor content:", e);
+    }
+  } else {
+    console.warn("initialContent.raw.blocks is missing or not an array", initialContent?.raw);
+  }
+  return EditorState.createEmpty();
+});
 
   const handleEditorChange = (newEditorState) => {
     setEditorState(newEditorState);
@@ -31,16 +56,15 @@ export default function RichTextEditor({
       handleExpansion(length);
     }
 
-      if(onContentChange){
-    const rawContent = convertToRaw(contentState);
-    onContentChange({
-      raw : rawContent,
-      plainText: text,
-      length: text.length,
-    })
-  }
+    if (onContentChange) {
+      const rawContent = convertToRaw(contentState);
+      onContentChange({
+        raw: rawContent,
+        plainText: text,
+        length: text.length,
+      });
+    }
   };
-
 
   const handleKeyCommand = (command, editorState) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -102,9 +126,7 @@ export default function RichTextEditor({
       </div>
 
       {toggle && (
-        <div
-        className="flex justify-center pb-1.5 border-b border-gray-400 mb-1 mt-3.5"
-        >
+        <div className="flex justify-center pb-1.5 border-b border-gray-400 mb-1 mt-3.5">
           <div className="flex flex-wrap gap-2 ">
             {/* Text Formatting */}
             <IconToolButton

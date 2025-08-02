@@ -6,7 +6,7 @@ export default function Archive({
     setArchived
 }) {
   return (
-    <div className="relative group ml-2 transition-all duration-300 ease-in-out">
+    <div className="relative group/archive ml-2 transition-all duration-300 ease-in-out">
       <button
         onClick={() => {
           setArchived((prev) => {
@@ -25,9 +25,9 @@ export default function Archive({
       </button>
 
       {
-        <div className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-6 translate-y-7 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover:opacity-100 group-hover:translate-y-14 transition-all duration-300 ease-in-out whitespace-nowrap">
+        <span className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-6 translate-y-7 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover/archive:opacity-100 group-hover:translate-y-14 transition-all duration-300 ease-in-out whitespace-nowrap">
           {!archived ? "Archive" : "Unarchive"}
-        </div>
+        </span>
       }
     </div>
   );

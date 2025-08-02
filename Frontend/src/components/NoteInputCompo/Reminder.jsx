@@ -24,7 +24,7 @@ export default function Reminder({
   console.log(reminderDate);
 
   return (
-    <div className="relative group ml-2 transition-all duration-300 ease-in-out">
+    <div className="relative group/reminder ml-2 transition-all duration-300 ease-in-out">
       <button
         onClick={() => setIsReminderOpen((prev) => !prev)}
         className="flex items-center justify-center cursor-pointer p-1 transition duration-300 ease-in-out"
@@ -38,7 +38,7 @@ export default function Reminder({
       </button>
 
       {!isRemiderOpen && (
-        <div className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-6 translate-y-7 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover:opacity-100 group-hover:translate-y-14 transition-all duration-300 ease-in-out whitespace-nowrap">
+        <div className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-6 translate-y-7 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover/reminder:opacity-100 group-hover:translate-y-14 transition-all duration-300 ease-in-out whitespace-nowrap">
           Remind me
         </div>
       )}

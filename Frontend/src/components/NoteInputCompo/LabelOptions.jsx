@@ -22,7 +22,7 @@ export default function LabelOptions({
     label.name.toLowerCase().includes(search.toLowerCase())
   );
   return (
-    <div className="relative  group ml-2 transition-all duration-300 ease-in-out">
+    <div className="relative  group/label ml-2 transition-all duration-300 ease-in-out">
       <button
         onClick={() => {
           setIsLabelOpen((prev) => {
@@ -44,9 +44,9 @@ export default function LabelOptions({
         />
       </button>
       {!islabelOpen && (
-        <div className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-8 translate-y-7 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover:opacity-100  group-hover:translate-y-14 transition-all duration-300 ease-in-out whitespace-nowrap">
+        <span className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-8 translate-y-7 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover/label:opacity-100  group-hover:translate-y-14 transition-all duration-300 ease-in-out whitespace-nowrap">
           Add labels
-        </div>
+        </span>
       )}
       {islabelOpen && (
         <div className="flex flex-col absolute w-[170px] max-h-[300px] bg-[#1f3a3b] top-full left-1/2 translate-x-2 -translate-y-3 mb-1 px-2 py-1 text-gray-200 text-xs rounded transition-all duration-300 ease-in-out whitespace-nowrap shadow-lg z-50">
