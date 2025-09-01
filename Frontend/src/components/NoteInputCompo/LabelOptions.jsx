@@ -44,12 +44,12 @@ export default function LabelOptions({
         />
       </button>
       {!islabelOpen && (
-        <span className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-8 translate-y-7 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover/label:opacity-100  group-hover:translate-y-14 transition-all duration-300 ease-in-out whitespace-nowrap">
+        <span className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-8 translate-y-7 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover/label:opacity-100  group-hover/label:translate-y-14 transition-all duration-300 ease-in-out whitespace-nowrap">
           Add labels
         </span>
       )}
       {islabelOpen && (
-        <div className="flex flex-col absolute w-[170px] max-h-[300px] bg-[#1f3a3b] top-full left-1/2 translate-x-2 -translate-y-3 mb-1 px-2 py-1 text-gray-200 text-xs rounded transition-all duration-300 ease-in-out whitespace-nowrap shadow-lg z-50">
+        <div className="flex flex-col absolute w-[270px] max-h-[300px] bg-[#1f3a3b] top-full left-1/2 translate-x-2 -translate-y-3 mb-10 px-2 py-1 text-gray-200 text-xs rounded transition-all duration-300 ease-in-out whitespace-nowrap shadow-lg z-50">
           <div className="flex justify-between items-center h-[24px]">
             <button
               className="w-[24px] h-[24px] flex items-center justify-center"
@@ -96,7 +96,7 @@ export default function LabelOptions({
                         : [...prev, label]
                     )
                   }
-                  className={`flex items-center justify-between py-2 px-2 rounded-md transition cursor-pointer ${
+                  className={`flex mb-1.5 items-center justify-between py-2 px-2 rounded-md transition cursor-pointer ${
                     isSelected ? "bg-gray-600" : "hover:bg-gray-700"
                   }`}
                 >
@@ -104,7 +104,7 @@ export default function LabelOptions({
                   {isSelected && (
                     <FontAwesomeIcon
                       icon={faCheck}
-                      className="text-green-400 text-sm"
+                      className="text-gray-200 text-sm"
                     />
                   )}
                 </div>

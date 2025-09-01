@@ -140,8 +140,8 @@ export default function NoteInput() {
   return (
     <div
       className={`flex ${
-        toggle && "flex-col gap-2 border   border-gray-300"
-      } items-center p-1.5 shadow-sm shadow-[#1b2828] w-[750px] h-auto transition-all duration-300 ease-in-out border border-gray-300 transition-border`}
+        toggle && "flex-col gap-2 border  border-gray-300"
+      } items-center  p-3 rounded shadow-sm shadow-[#1b2828] w-[750px] h-auto transition-all duration-300 ease-in-out border border-gray-300 transition-border`}
       style={{ backgroundColor }}
     >
       {toggle && (
@@ -260,7 +260,7 @@ export default function NoteInput() {
             type="button"
             onClick={saveNote}
             disabled={isSaving}
-            className="w-[80px] border-2 border-[#38caef] h-[30px] flex items-center justify-center cursor-pointer relative overflow-hidden transition-all duration-300 ease-in-out hover:scale-95 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-[#38caef] before:to-[#38caef] before:transition-all before:duration-300 before:ease-in-out before:z-[-1] hover:before:left-0 text-gray-100"
+            className="w-[80px] h-[35px] bg-gradient-to-r from-cyan-500 to-[#25879f] text-white font-semibold rounded cursor-pointer shadow-lg hover:scale-[1.02] transition-transform duration-200"
           >
             {isSaving ? "Saving..." : "Save"}
           </button>

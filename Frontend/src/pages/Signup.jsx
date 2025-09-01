@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import Header from "../components/Header";
 
 export default function Signup() {
   const [passNotMatched, setPassNotMatched] = useState(false);
@@ -53,11 +54,10 @@ export default function Signup() {
       confirmPassInputRef.current.value = "";
       setTimeout(() => {
         setShowPopUp(false);
-      }, 3000);
+      }, 5000);
       setTimeout(() => {
         navigate("/signin");
       }, 3000);
-      
     } catch (err) {
       const res = err?.response;
 
@@ -66,7 +66,7 @@ export default function Signup() {
         setShowPopUp(true);
         setInterval(() => {
           setShowPopUp(false);
-        }, 3000);
+        }, 5000);
         return;
       }
 
@@ -95,7 +95,7 @@ export default function Signup() {
         setShowPopUp(true);
         setTimeout(() => {
           setShowPopUp(false);
-        }, 3000);
+        }, 5000);
       }
 
       console.error("Signup error:", res.data);
@@ -103,13 +103,11 @@ export default function Signup() {
   }
 
   return (
-    <div className="w-screen h-screen flex justify-center items-center">
-      <div className="bg-[#3c6e71] w-[500px] h-[650px] flex flex-col gap-2 ">
-        <div className="flex w-full h-[95px] bg-[#1f3a3b] justify-center items-center">
-          <img className="w-[270px] h-[270px]" src="/NoteKove2.png" />
-        </div>
+    <div className="w-screen h-screen flex flex-col gap-10 justify-center items-center ">
+      <Header />
 
-        <div className="flex-1 w-full h-full p-4">
+      <div className="backdrop-blur-xl flex-1 bg-white/10 border border-white/20 shadow-2xl rounded w-[500px] mb-10 pt-6">
+        <div className="w-full h-auto p-4">
           <p className="w-full h-[50px] text-3xl font-semibold text-white border-b-2 mb-4">
             SIGN UP
           </p>
@@ -170,7 +168,7 @@ export default function Signup() {
                     }
                   }}
                   placeholder={field.label}
-                  className="peer w-full border-0 border-b-2 border-gray-400 bg-transparent py-1 text-white placeholder-transparent outline-none transition-all focus:border-b-[3px] focus:[border-image:linear-gradient(to_right,_#116399,_#38caef)_1]"
+                  className="peer w-full border-0 border-b-2 border-gray-400 bg-transparent py-1 text-white caret-white placeholder-transparent outline-none transition-all focus:border-b-[3px] focus:[border-image:linear-gradient(to_right,_#116399,_#38caef)_1]"
                 />
                 <label
                   htmlFor={field.id}
@@ -178,7 +176,7 @@ export default function Signup() {
                 >
                   {field.label}
                 </label>
-                <p className="w-full min-h-[18px] max-h-[50px] mb-[4px] text-[#e56b6f]">
+                <p className="w-full min-h-[18px] max-h-[50px] mb-[4px] text-[#f57276]">
                   {field.id === "name" && namelengthErr
                     ? "Name must be at least 2 characters"
                     : field.id === "confirmPass" && passNotMatched
@@ -196,17 +194,17 @@ export default function Signup() {
             {/* ✅ Submit Button */}
             <button
               type="submit"
-              className="w-[150px] bg-[#3c6e71] border-2 border-[#38caef] h-[50px] my-3 flex items-center justify-center cursor-pointer relative overflow-hidden transition-all duration-500 ease-in-out hover:scale-95 before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-[#38caef] before:to-[#38caef] before:transition-all before:duration-500 before:ease-in-out before:z-[-1] hover:before:left-0 text-[#fff]"
+              className="w-[300px] py-3 bg-gradient-to-r from-cyan-500 to-[#25879f] text-white font-semibold rounded cursor-pointer shadow-lg hover:scale-[1.02] transition-transform duration-200"
             >
               SIGN-UP
             </button>
 
-            <div className="text-center mt-3 text-sm text-[#dfe4ea]">
+            <div className="text-center mt-6 text-sm text-[#dfe4ea]">
               Already have an account?
               <button
                 type="button"
                 onClick={() => navigate("/signin")}
-                className="ml-1 text-[#38caef] font-semibold hover:underline transition duration-200"
+                className="ml-1.5 text-[#38caef] font-semibold hover:underline transition duration-200 cursor-pointer"
               >
                 Sign In
               </button>
@@ -216,12 +214,11 @@ export default function Signup() {
       </div>
       {showPopUp && (
         <div
-          className={`fixed top-5 right-5 px-5 py-3 rounded-md shadow-lg z-50 transition-all duration-300
-    ${
-      successMessage.success
-        ? "bg-green-600 text-white"
-        : "bg-red-600 text-white"
-    }`}
+          className={`fixed top-25 right-5 px-5 py-3 rounded-md shadow-lg z-50 
+      transform transition-all duration-500 ease-in-out
+      ${successMessage.success ? "bg-green-600" : "bg-red-600"} text-white
+      ${showPopUp ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-5"}
+    `}
         >
           {successMessage.message}
         </div>

@@ -64,7 +64,7 @@ export default function BgOptions({
       </button>
 
       {!isOpen && (
-        <span className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-12 translate-y-7 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover/bg:opacity-100 group-hover:translate-y-14 transition-all duration-300 ease-in-out whitespace-nowrap">
+        <span className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-12 translate-y-7 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover/bg:opacity-100 group-hover/bg:translate-y-14 transition-all duration-300 ease-in-out whitespace-nowrap">
           Background color
         </span>
       )}
