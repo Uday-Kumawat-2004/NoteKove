@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareCheck } from "@fortawesome/free-regular-svg-icons";
 import { faThumbtack, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import BgOptions from "./NoteInputCompo/BgOptions";
 import LabelsDiv from "./NoteInputCompo/LabelsDiv";
 import LabelOptions from "./NoteInputCompo/LabelOptions";
@@ -12,7 +12,7 @@ import Reminder from "./NoteInputCompo/Reminder";
 import RichTextEditor from "./NoteInputCompo/RichTextEditor";
 import axios from "axios";
 
-export default function NoteInput() {
+export default function NoteInput({ defaultLabels = [] }) {
   const [toggle, setToggle] = useState(false);
   const [expansionLevel, setExpansionLevel] = useState(0);
   const [pin, setPin] = useState(false);
@@ -46,6 +46,12 @@ export default function NoteInput() {
       setToggle(true);
     }
   }
+
+    useEffect(() => {
+    if (defaultLabels.length > 0) {
+      setOnLabelSelect(defaultLabels);
+    }
+  }, [defaultLabels]);
 
   const handleTitleInput = () => {
     const textarea = titleRef.current;

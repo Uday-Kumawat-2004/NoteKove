@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHouse,
@@ -23,6 +23,8 @@ export default function SideDrawer() {
   const [open, setOpen] = useState(true);
   const [openChilds, setOpenChilds] = useState(false);
   const [isLabelEditOpen, setIsEditLabelOpen] = useState(false);
+  const location = useLocation();
+  const isLabelPage = location.pathname.startsWith("/labels/");
 
   const {
     data: labels,
@@ -71,20 +73,23 @@ export default function SideDrawer() {
                     setOpenChilds((prev) => !prev);
                   }}
                   className={`group flex items-center relative rounded-lg text-white cursor-pointer
-                transition-all duration-500 ease-in-out
-                ${
-                  open ? "gap-3 px-3 py-2 justify-start" : "justify-center p-3"
-                } 
-                hover:bg-[#25879fb5]`}
+    transition-all duration-500 ease-in-out
+    ${open ? "gap-3 px-3 py-2 justify-start" : "justify-center p-3"}
+    ${
+      isLabelPage
+        ? "bg-gradient-to-r from-cyan-500 to-[#25879f]" // active if on label page
+        : "hover:bg-[#25879fb5]"
+    }`}
                 >
                   <FontAwesomeIcon icon={item.icon} className="text-lg" />
                   <span
                     className={`whitespace-nowrap text-base transition-all duration-500 ease-in-out
-                  ${
-                    open
-                      ? "opacity-100 translate-x-0 w-full"
-                      : "opacity-0 -translate-x-3 w-0 overflow-hidden"
-                  }`}
+      ${
+        open
+          ? "opacity-100 translate-x-0 w-full"
+          : "opacity-0 -translate-x-3 w-0"
+      }
+    `}
                   >
                     {item.name}
                   </span>
