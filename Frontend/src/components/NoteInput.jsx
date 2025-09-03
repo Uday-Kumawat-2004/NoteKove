@@ -37,7 +37,7 @@ export default function NoteInput() {
     data: labels,
     error: labelError,
     loading: labelLoading,
-  } = useGetLabels("http://localhost:4000/api/createLabel");
+  } = useGetLabels("http://localhost:4000/api/labels");
   console.log(onLabelSelect);
   const titleRef = useRef(null);
 

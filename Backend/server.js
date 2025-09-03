@@ -23,7 +23,7 @@ app.use('/api/users', signup);
 app.use('/api/users', signin);
 app.use(protect);
 app.use('/api', noteRoutes);
-app.use('/api/createLabel', labelRoute);
+app.use('/api/labels', labelRoute);
 
 const Port = process.env.Port || 5000;
 app.listen(Port, ()=>(

@@ -49,10 +49,10 @@ export default function LabelOptions({
         </span>
       )}
       {islabelOpen && (
-        <div className="flex flex-col absolute w-[270px] max-h-[300px] bg-[#1f3a3b] top-full left-1/2 translate-x-2 -translate-y-3 mb-10 px-2 py-1 text-gray-200 text-xs rounded transition-all duration-300 ease-in-out whitespace-nowrap shadow-lg z-50">
+        <div className="flex flex-col absolute w-[270px] max-h-[300px] bg-gradient-to-br from-[#0b191f] to-[#0f2027] border border-gray-400/20 shadow-sm shadow-gray-200/30 top-full left-1/2 translate-x-2 -translate-y-3 mb-10 px-2 py-1 text-gray-200 text-xs rounded transition-all duration-300 ease-in-out whitespace-nowrap  z-50">
           <div className="flex justify-between items-center h-[24px]">
             <button
-              className="w-[24px] h-[24px] flex items-center justify-center"
+              className="w-[24px] h-[24px] flex items-center justify-center cursor-pointer"
               onClick={() => {
                 setIsLabelOpen((prev) => !prev);
                 setSearch("");
@@ -64,13 +64,13 @@ export default function LabelOptions({
                 style={{ color: "#d1d5db" }}
               />
             </button>
-            <h1 className="text-gray-300 text-sm">Select Labels</h1>
+            <h1 className="text-gray-300 text-sm font-medium">Select Labels</h1>
             <div className="w-[24px] h-[24px]"></div>
           </div>
           <input
             type="text"
-            placeholder="Search"
-            className="bg-transparent mt-3 h-[25px] px-4 border border-gray-600 focus:outline-none rounded-2xl w-full text-sm placeholder:text-gray-400"
+            placeholder="Search label"
+            className="bg-transparent mt-3 h-[25px] px-4 border border-gray-600 focus:outline-none rounded-lg w-full text-sm placeholder:text-gray-400"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -97,7 +97,7 @@ export default function LabelOptions({
                     )
                   }
                   className={`flex mb-1.5 items-center justify-between py-2 px-2 rounded-md transition cursor-pointer ${
-                    isSelected ? "bg-gray-600" : "hover:bg-gray-700"
+                    isSelected ? "bg-cyan-600" : "hover:bg-[#25879fb5]"
                   }`}
                 >
                   <span className="text-sm">{label.name}</span>

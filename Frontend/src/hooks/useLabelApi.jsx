@@ -1,25 +1,28 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
 
-export  function useGetLabels(url) {
+import { useEffect, useState, useCallback } from "react";
+
+export function useGetLabels(url) {
   const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get(url, { withCredentials: true });
+      setData(res.data.labels);
+      setError(null);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [url]);
 
   useEffect(() => {
-    async function getLabels() {
-      try {
-        const res = await axios.get(url, {
-          withCredentials: true,
-        });
-        setData(res.data.labels);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    if (url) getLabels();
-  }, [url]);
-  return { data, error, loading };
+    fetchData();
+  }, [fetchData]);
+
+  return { data, loading, error, refetch: fetchData };
 }
