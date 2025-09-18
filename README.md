@@ -28,7 +28,7 @@
 
 ## ⚙️ Tech Stack
 
-* **Frontend:** React 19, Vite, React Router, Tailwind CSS, Draft.js, Framer Motion
+* **Frontend:** React 19, Vite, React Router, Tailwind CSS, Draft.js,
 * **Backend:** Node.js, Express 5, MongoDB/Mongoose
 * **Auth:** JWT + Cookie based sessions
 * **Extras:** node-cron (auto cleanup), validator (password rules)
