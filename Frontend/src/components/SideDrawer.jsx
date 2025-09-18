@@ -3,11 +3,12 @@ import { NavLink, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHouse,
-  faCog,
   faArrowLeft,
   faTag,
   faChevronRight,
   faAdd,
+  faTrash,
+  faArchive,
 } from "@fortawesome/free-solid-svg-icons";
 import { useGetLabels } from "../hooks/useLabelApi";
 import LabelEditWindow from "./NoteBoardCompo/LabelEditWindow";
@@ -15,8 +16,9 @@ import LabelEditWindow from "./NoteBoardCompo/LabelEditWindow";
 const navItems = [
   { name: "Home", path: "/home", icon: faHouse },
 
-  { name: "Settings", path: "/settings", icon: faCog },
+  { name: "Archive", path: "/ArchivedItems", icon: faArchive },
   { name: "Labels", path: "/profile", icon: faTag, childs: true },
+  { name: "Trash", path: "/TrashedItems", icon: faTrash },
 ];
 
 export default function SideDrawer() {

@@ -44,7 +44,7 @@ export default function EditingFeild({ existingData, closeModal }) {
     data: labels,
     error: labelError,
     loading: labelLoading,
-  } = useGetLabels("http://localhost:4000/api/createLabel");
+  } = useGetLabels("http://localhost:4000/api/labels");
 
   useEffect(() => {
     if (titleRef.current) {

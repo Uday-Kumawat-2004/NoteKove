@@ -8,6 +8,9 @@ import signin from './routes/auth/signin.js'
 import { protect } from './middlewares/authMiddleware.js';
 import noteRoutes from './routes/auth/noteRoutes.js'
 import labelRoute from './routes/auth/labelRoute.js'
+import cron from "node-cron";
+import note from './models/note.js';
+import { searchNotes } from './controllers/noteController.js';
 dotenv.config();
 const app= express();
 app.use(cors({
@@ -17,6 +20,24 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 await connectDB(); 
+
+
+cron.schedule("*/2 * * * *", async () => {  // runs every 2 minutes
+  try {
+    const oneMinuteAgo = new Date(Date.now() - 60 * 1000); // 1 minute ago
+
+    const result = await note.deleteMany({
+      trashed: true,
+      trashedAt: { $lte: oneMinuteAgo },
+    });
+
+    console.log("🗑️ Auto-deleted trashed notes:", result.deletedCount);
+  } catch (err) {
+    console.error("[CRON JOB ERROR]", err);
+  }
+});
+
+
 
 
 app.use('/api/users', signup);

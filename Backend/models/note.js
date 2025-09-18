@@ -82,6 +82,10 @@ const noteSchema = new mongoose.Schema(
       default: false,
       index: true,
     },
+    trashedAt: {
+      type: Date,
+      default: null,
+    },
     position: {
       type: Number,
       default: 0,
@@ -101,7 +105,7 @@ noteSchema.statics.findByUser = function (userId, options = {}) {
     trashed: false,
     ...options,
   };
-    return this.find(query)
+  return this.find(query)
     .populate("labels")
     .sort({ pinned: -1, updatedAt: -1 });
 };
@@ -128,7 +132,6 @@ noteSchema.statics.searchNotes = function (userId, searchTerm) {
     $or: [
       { title: { $regex: searchTerm, $options: "i" } },
       { "content.plainText": { $regex: searchTerm, $options: "i" } },
-      { labels: { $in: [new RegExp(searchTerm, "i")] } },
     ],
   }).sort({ updatedAt: -1 });
 };

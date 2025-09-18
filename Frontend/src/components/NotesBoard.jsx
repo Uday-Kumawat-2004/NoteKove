@@ -1,8 +1,38 @@
-import { useGetNotes } from "../hooks/useNoteApi";
+// src/components/NotesBoard.jsx
 import NoteCard from "./NoteBoardCompo/NoteCard";
+import { useGetNotes } from "../hooks/useNoteApi";
+import useSearchNotes from "../hooks/useSearchNotes";
 
-export default function NotesBoard({ currentLabelId }) {
-  const { data, error, loading } = useGetNotes("http://localhost:4000/api/notes");
+export default function NotesBoard({
+  currentLabelId,
+  showTrashed = false,
+  showArchived = false,
+  searchQuery = "",
+}) {
+  // ✅ if we have a query → useSearchNotes
+  const {
+    data: searchData,
+    loading: searchLoading,
+    error: searchError,
+  } = useSearchNotes(searchQuery);
+
+  // ✅ if no query → useGetNotes
+  const url = showTrashed
+    ? "http://localhost:4000/api/notes?trashed=true"
+    : showArchived
+    ? "http://localhost:4000/api/notes?archived=true"
+    : "http://localhost:4000/api/notes";
+
+  const {
+    data: notesData,
+    loading: notesLoading,
+    error: notesError,
+  } = useGetNotes(url);
+
+  // ---------------- DATA SOURCE ----------------
+  const loading = searchQuery ? searchLoading : notesLoading;
+  const error = searchQuery ? searchError : notesError;
+  let data = searchQuery ? searchData : notesData;
 
   if (loading) {
     return (
@@ -23,23 +53,37 @@ export default function NotesBoard({ currentLabelId }) {
   if (!data || data.length === 0) {
     return (
       <div className="text-gray-400 font-medium mt-4">
-        No notes available.
+        {searchQuery ? "No matching notes found." : "No notes available."}
       </div>
     );
   }
 
-  // ✅ Filter notes by label if currentLabelId is provided
+  // ---------------- FILTERING (labels / archive / trash) ----------------
   let filteredNotes = data;
+
   if (currentLabelId) {
-    filteredNotes = data.filter((note) =>
+    filteredNotes = filteredNotes.filter((note) =>
       note.labels?.some((label) =>
-        typeof label === "string" ? label === currentLabelId : label._id === currentLabelId
+        typeof label === "string"
+          ? label === currentLabelId
+          : label._id === currentLabelId
       )
     );
   }
 
-  const pinnedNotes = filteredNotes.filter((item) => item.pinned && !item.trashed);
-  const otherNotes = filteredNotes.filter((item) => !item.pinned && !item.trashed);
+  if (showArchived) {
+    filteredNotes = filteredNotes.filter((note) => note.archived === true);
+  } else if (showTrashed) {
+    filteredNotes = filteredNotes.filter((note) => note.trashed === true);
+  } else {
+    filteredNotes = filteredNotes.filter(
+      (note) => !note.archived && !note.trashed
+    );
+  }
+
+  // ---------------- PINNED + OTHERS ----------------
+  const pinnedNotes = filteredNotes.filter((item) => item.pinned);
+  const otherNotes = filteredNotes.filter((item) => !item.pinned);
 
   return (
     <div className="flex flex-col justify-center items-center w-full h-auto">
@@ -67,6 +111,12 @@ export default function NotesBoard({ currentLabelId }) {
             ))}
           </div>
         </>
+      )}
+
+      {filteredNotes.length === 0 && (
+        <div className="text-gray-400 mt-6">
+          {searchQuery ? "No matching notes found." : "No notes available."}
+        </div>
       )}
     </div>
   );
