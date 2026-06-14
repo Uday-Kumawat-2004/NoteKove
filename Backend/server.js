@@ -1,7 +1,7 @@
 import express from 'express';
 import { connectDB } from './config/db.js';
+import { env } from './config/env.js';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import signup from './routes/auth/signup.js'
 import cookieParser from 'cookie-parser';
 import signin from './routes/auth/signin.js'
@@ -10,8 +10,6 @@ import noteRoutes from './routes/auth/noteRoutes.js'
 import labelRoute from './routes/auth/labelRoute.js'
 import cron from "node-cron";
 import note from './models/note.js';
-import { searchNotes } from './controllers/noteController.js';
-dotenv.config();
 const app= express();
 app.use(cors({
   origin: 'http://localhost:5173', // or your frontend port
@@ -46,7 +44,7 @@ app.use(protect);
 app.use('/api', noteRoutes);
 app.use('/api/labels', labelRoute);
 
-const Port = process.env.Port || 5000;
+const Port = env.PORT;
 app.listen(Port, ()=>(
     console.log(`The server is listining on the port: ${Port}`)
 ));

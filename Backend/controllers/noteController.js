@@ -1,4 +1,3 @@
-import { json } from "express";
 import Note from "../models/note.js";
 
 export async function createNote(req, res) {
@@ -16,9 +15,9 @@ export async function createNote(req, res) {
       position,
       reminders,
     } = req.body;
-    const userId = req.user?._id || req.body.user;
+    const userId = req.user._id;
 
-    if (!userId) return res.status(401).json({ error: "User not authorised" });
+    if (!userId) return res.status(401).json({ error: "User not authorized" });
 
     const newNote = await Note.create({
       user: userId,
@@ -45,7 +44,9 @@ export async function createNote(req, res) {
 
 export async function getUserNotes(req, res) {
   try {
-    const userId = req.user?._id || req.body.user;
+    const userId = req.user._id;
+    if (!userId) return res.status(401).json({ error: "User not authorized" });
+
     const { trashed, archived } = req.query;
 
     let notes;
@@ -69,12 +70,33 @@ export async function updateNote(req, res) {
   try {
     const { id } = req.params;
     const userId = req.user._id;
-    const updateData = req.body;
+    if (!userId) return res.status(401).json({ error: "User not authorized" });
+
+    const allowedFields = [
+      "title",
+      "content",
+      "checklist",
+      "noteType",
+      "color",
+      "labels",
+      "pinned",
+      "archived",
+      "position",
+      "reminders",
+    ];
+
+    const updateData = Object.fromEntries(
+      Object.entries(req.body).filter(([key]) => allowedFields.includes(key))
+    );
+
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({ error: "No valid note fields provided" });
+    }
 
     const note = await Note.findOneAndUpdate(
       { _id: id, user: userId },
       updateData,
-      { new: true }
+      { new: true, runValidators: true }
     );
 
     if (!note) {

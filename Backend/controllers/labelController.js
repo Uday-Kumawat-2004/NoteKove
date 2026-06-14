@@ -4,9 +4,9 @@ import Label from "../models/labels.js";
 async function createLabel(req, res) {
   try {
     const { labelName } = req.body;
-    const userId = req.user?._id || req.body.user;
+    const userId = req.user._id;
 
-    if (!userId) return res.status(401).json({ error: "User not authorised" });
+    if (!userId) return res.status(401).json({ error: "User not authorized" });
 
     const existingLabel = await Label.findOne({ name: labelName, user: userId });
     if (existingLabel) {
@@ -24,8 +24,8 @@ async function createLabel(req, res) {
 
 async function getLabel(req, res) {
   try {
-    const userId = req.user?._id || req.body.user;
-    if (!userId) return res.status(401).json({ error: "User not authorised" });
+    const userId = req.user._id;
+    if (!userId) return res.status(401).json({ error: "User not authorized" });
 
     const labels = await Label.find({ user: userId }).sort({ createdAt: -1 });
     res.status(200).json({ labels });
@@ -40,9 +40,9 @@ async function updateLabel(req, res) {
   try {
     const { id } = req.params;
     const { newName } = req.body;
-    const userId = req.user?._id || req.body.user;
+    const userId = req.user._id;
 
-    if (!userId) return res.status(401).json({ error: "User not authorised" });
+    if (!userId) return res.status(401).json({ error: "User not authorized" });
 
     const updatedLabel = await Label.findOneAndUpdate(
       { _id: id, user: userId },
@@ -65,9 +65,9 @@ async function updateLabel(req, res) {
 async function deleteLabel(req, res) {
   try {
     const { id } = req.params;
-    const userId = req.user?._id || req.body.user;
+    const userId = req.user._id;
 
-    if (!userId) return res.status(401).json({ error: "User not authorised" });
+    if (!userId) return res.status(401).json({ error: "User not authorized" });
 
     const deletedLabel = await Label.findOneAndDelete({ _id: id, user: userId });
 

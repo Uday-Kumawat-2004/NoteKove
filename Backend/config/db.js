@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-dotenv.config();
+import { env } from './env.js';
 
-const mongoUri = process.env.MONGO_URI;
+const mongoUri = env.MONGO_URI;
 
 export  const connectDB = async () => {
     try{
