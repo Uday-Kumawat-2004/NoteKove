@@ -17,4 +17,6 @@ const labelSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+labelSchema.index({ user: 1, name: 1 }, { unique: true });
+
 export default mongoose.model("Label", labelSchema);

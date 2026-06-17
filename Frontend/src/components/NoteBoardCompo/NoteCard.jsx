@@ -43,8 +43,15 @@ export default function NoteCard({ note }) {
   };
 
   // move to trash
-  const toggletrash = async () => {
-    await updateNote(note._id, { trashed: true, trashedAt: new Date() });
+  const moveToTrash = async () => {
+    try {
+      await axios.delete(`http://localhost:4000/api/notes/${note._id}`, {
+        withCredentials: true,
+      });
+      alert("Note moved to trash!");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   // restore
@@ -67,9 +74,12 @@ export default function NoteCard({ note }) {
   // permanent delete
   const permanentlyDelete = async () => {
     try {
-      await axios.delete(`http://localhost:4000/api/notes/${note._id}`, {
-        withCredentials: true,
-      });
+      await axios.delete(
+        `http://localhost:4000/api/notes/${note._id}/permanent`,
+        {
+          withCredentials: true,
+        }
+      );
       alert("Note permanently deleted!");
     } catch (err) {
       console.error(err);
@@ -95,13 +105,13 @@ export default function NoteCard({ note }) {
 
   return (
     <div
-      className="flex flex-col group w-[750px] items-center p-1.5 mb-6 border border-gray-200"
+      className="flex flex-col group w-750px items-center p-1.5 mb-6 border border-gray-200"
       style={{ background: note.color || "transparent" }}
     >
       {/* Title + Pin */}
       <div className="flex flex-1 w-full pb-2.5">
         <div
-          className="flex-1 text-gray-200 text-lg font-medium break-words overflow-hidden"
+          className="flex-1 text-gray-200 text-lg font-medium wrap-break-words overflow-hidden"
           onClick={openModal}
         >
           {note.title}
@@ -127,7 +137,7 @@ export default function NoteCard({ note }) {
 
       {/* Content */}
       <div
-        className="w-full text-gray-200 text-md whitespace-pre-wrap break-words overflow-hidden max-h-140 overflow-y-hidden relative"
+        className="w-full text-gray-200 text-md whitespace-pre-wrap wrap-break-words overflow-hidden max-h-140 overflow-y-hidden relative"
         onClick={openModal}
       >
         {hasChecklist ? (
@@ -136,7 +146,7 @@ export default function NoteCard({ note }) {
           note.content.raw.blocks &&
           note.content.raw.blocks.length > 0 ? (
           <div
-            className="line-clamp-[10]"
+            className="line-clamp-10"
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(draftToHtml(note.content.raw)),
             }}
@@ -144,7 +154,7 @@ export default function NoteCard({ note }) {
         ) : (
           <span className="text-gray-400">No Content</span>
         )}
-        <div className="absolute bottom-0 left-0 w-full h-10 bg-gradient-to-t from-[note.color||#111] to-transparent pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-full h-10 bg-linear-to-t from-[note.color||#111] to-transparent pointer-events-none"></div>
       </div>
 
       {/* Labels + Reminders */}
@@ -171,7 +181,7 @@ export default function NoteCard({ note }) {
           <>
             <div className="flex items-center justify-center w-full">
               <button
-                onClick={toggletrash}
+                onClick={moveToTrash}
                 className="text-gray-200 w-full px-10 py-1 border-none hover:cursor-pointer 
                    opacity-0 group-hover:opacity-100 
                    pointer-events-none group-hover:pointer-events-auto 

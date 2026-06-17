@@ -1,12 +1,24 @@
-import express from 'express'
-import{ createNote, getUserNotes, deleteNote, updateNote, restoreNote, searchNotes } from '../../controllers/noteController.js'
-import { protect } from '../../middlewares/authMiddleware.js';
+import express from "express";
+import {
+  createNote, getUserNotes, deleteNote,
+  permanentDeleteNote, updateNote, restoreNote, searchNotes,
+} from "../../controllers/noteController.js";
+import {
+  createNoteValidation, updateNoteValidation, searchNoteValidation,
+} from "../../validators/noteValidator.js";
+import { validate } from "../../middlewares/validate.js";
+
 const router = express.Router();
 
-router.post("/notes" ,createNote);
-router.get("/notes", getUserNotes);
-router.put("/notes/:id", updateNote);
-router.delete("/notes/:id", deleteNote);
+// specific routes first
+router.get("/notes/search", searchNoteValidation, validate, searchNotes);
 router.put("/notes/restore/:id", restoreNote);
-router.get("/notes/search", searchNotes);
+router.delete("/notes/:id/permanent", permanentDeleteNote);
+
+// param routes after
+router.post("/notes", createNoteValidation, validate, createNote);
+router.get("/notes", getUserNotes);
+router.put("/notes/:id", updateNoteValidation, validate, updateNote);
+router.delete("/notes/:id", deleteNote);
+
 export default router;

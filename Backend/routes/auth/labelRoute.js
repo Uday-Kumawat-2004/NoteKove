@@ -1,21 +1,34 @@
 import express from "express";
+
 import {
   createLabel,
   getLabel,
   updateLabel,
   deleteLabel,
 } from "../../controllers/labelController.js";
-import { protect } from "../../middlewares/authMiddleware.js";
+
+import { labelValidation } from "../../validators/labelValidator.js";
+
+import { validate } from "../../middlewares/validate.js";
 
 const router = express.Router();
 
+router.post(
+  "/",
+  labelValidation,
+  validate,
+  createLabel
+);
 
-router.post("/", protect, createLabel);
+router.get("/", getLabel);
 
-router.get("/", protect, getLabel);
+router.put(
+  "/:id",
+  labelValidation,
+  validate,
+  updateLabel
+);
 
-router.put("/:id", protect, updateLabel);
-
-router.delete("/:id", protect, deleteLabel);
+router.delete("/:id", deleteLabel);
 
 export default router;

@@ -1,85 +1,123 @@
 import Label from "../models/labels.js";
+import asyncHandler from "../middlewares/asyncHandler.js";
 
+export const createLabel = asyncHandler(async (req, res) => {
+const { labelName } = req.body;
+const userId = req.user._id;
 
-async function createLabel(req, res) {
-  try {
-    const { labelName } = req.body;
-    const userId = req.user._id;
-
-    if (!userId) return res.status(401).json({ error: "User not authorized" });
-
-    const existingLabel = await Label.findOne({ name: labelName, user: userId });
-    if (existingLabel) {
-      return res.status(409).json({ error: "Label already exists for this user" });
-    }
-
-    const newLabel = await Label.create({ name: labelName, user: userId });
-    res.status(201).json({ message: "Label created", label: newLabel });
-  } catch (error) {
-    console.error("Label creation error:", error.message);
-    res.status(500).json({ error: "Failed to create label" });
-  }
+if (!userId) {
+const error = new Error("User not authorized");
+error.statusCode = 401;
+throw error;
 }
 
+const existingLabel = await Label.findOne({
+name: labelName,
+user: userId,
+});
 
-async function getLabel(req, res) {
-  try {
-    const userId = req.user._id;
-    if (!userId) return res.status(401).json({ error: "User not authorized" });
-
-    const labels = await Label.find({ user: userId }).sort({ createdAt: -1 });
-    res.status(200).json({ labels });
-  } catch (error) {
-    console.error("Error fetching labels:", error.message);
-    res.status(500).json({ error: "Failed to fetch labels" });
-  }
+if (existingLabel) {
+const error = new Error(
+"Label already exists for this user"
+);
+error.statusCode = 409;
+throw error;
 }
 
+const newLabel = await Label.create({
+name: labelName,
+user: userId,
+});
 
-async function updateLabel(req, res) {
-  try {
-    const { id } = req.params;
-    const { newName } = req.body;
-    const userId = req.user._id;
+res.status(201).json({
+success: true,
+data: newLabel,
+});
+});
 
-    if (!userId) return res.status(401).json({ error: "User not authorized" });
+export const getLabel = asyncHandler(async (req, res) => {
+const userId = req.user._id;
 
-    const updatedLabel = await Label.findOneAndUpdate(
-      { _id: id, user: userId },
-      { name: newName },
-      { new: true }
-    );
-
-    if (!updatedLabel) {
-      return res.status(404).json({ error: "Label not found or unauthorized" });
-    }
-
-    res.status(200).json({ message: "Label updated", label: updatedLabel });
-  } catch (error) {
-    console.error("Error updating label:", error.message);
-    res.status(500).json({ error: "Failed to update label" });
-  }
+if (!userId) {
+const error = new Error("User not authorized");
+error.statusCode = 401;
+throw error;
 }
 
+const labels = await Label.find({
+user: userId,
+}).sort({ createdAt: -1 });
 
-async function deleteLabel(req, res) {
-  try {
-    const { id } = req.params;
-    const userId = req.user._id;
+res.status(200).json({
+success: true,
+data: labels,
+});
+});
 
-    if (!userId) return res.status(401).json({ error: "User not authorized" });
+export const updateLabel = asyncHandler(async (req, res) => {
+const { id } = req.params;
+const { newName } = req.body;
+const userId = req.user._id;
 
-    const deletedLabel = await Label.findOneAndDelete({ _id: id, user: userId });
-
-    if (!deletedLabel) {
-      return res.status(404).json({ error: "Label not found or unauthorized" });
-    }
-
-    res.status(200).json({ message: "Label deleted", label: deletedLabel });
-  } catch (error) {
-    console.error("Error deleting label:", error.message);
-    res.status(500).json({ error: "Failed to delete label" });
-  }
+if (!userId) {
+const error = new Error("User not authorized");
+error.statusCode = 401;
+throw error;
 }
 
-export { createLabel, getLabel, updateLabel, deleteLabel };
+const updatedLabel = await Label.findOneAndUpdate(
+{
+_id: id,
+user: userId,
+},
+{
+name: newName,
+},
+{
+new: true,
+runValidators: true,
+}
+);
+
+if (!updatedLabel) {
+const error = new Error(
+"Label not found or unauthorized"
+);
+error.statusCode = 404;
+throw error;
+}
+
+res.status(200).json({
+success: true,
+data: updatedLabel,
+});
+});
+
+export const deleteLabel = asyncHandler(async (req, res) => {
+const { id } = req.params;
+const userId = req.user._id;
+
+if (!userId) {
+const error = new Error("User not authorized");
+error.statusCode = 401;
+throw error;
+}
+
+const deletedLabel = await Label.findOneAndDelete({
+_id: id,
+user: userId,
+});
+
+if (!deletedLabel) {
+const error = new Error(
+"Label not found or unauthorized"
+);
+error.statusCode = 404;
+throw error;
+}
+
+res.status(200).json({
+success: true,
+data: deletedLabel,
+});
+});

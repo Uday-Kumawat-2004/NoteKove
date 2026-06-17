@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { escapeRegex } from "../utils/escapeRegex.js";
 
 const noteSchema = new mongoose.Schema(
   {
@@ -82,10 +83,11 @@ const noteSchema = new mongoose.Schema(
       default: false,
       index: true,
     },
-    trashedAt: {
-      type: Date,
-      default: null,
-    },
+  trashedAt: {
+    type: Date,
+    default: null,
+    index: true,   // ← add this so the cron query is fast at scale
+  },
     position: {
       type: Number,
       default: 0,
@@ -103,6 +105,7 @@ noteSchema.statics.findByUser = function (userId, options = {}) {
   const query = {
     user: userId,
     trashed: false,
+    archived: false,
     ...options,
   };
   return this.find(query)
@@ -125,15 +128,33 @@ noteSchema.statics.findTrashedByUser = function (userId) {
   }).sort({ updatedAt: -1 });
 };
 
-noteSchema.statics.searchNotes = function (userId, searchTerm) {
+noteSchema.statics.searchNotes = function (
+  userId,
+  searchTerm
+) {
+  const escapedSearch =
+    escapeRegex(searchTerm);
+
   return this.find({
     user: userId,
     trashed: false,
     $or: [
-      { title: { $regex: searchTerm, $options: "i" } },
-      { "content.plainText": { $regex: searchTerm, $options: "i" } },
+      {
+        title: {
+          $regex: escapedSearch,
+          $options: "i",
+        },
+      },
+      {
+        "content.plainText": {
+          $regex: escapedSearch,
+          $options: "i",
+        },
+      },
     ],
-  }).sort({ updatedAt: -1 });
+  })
+    .limit(50)
+    .sort({ updatedAt: -1 });
 };
 
 noteSchema.statics.findByLabel = function (userId, label) {
