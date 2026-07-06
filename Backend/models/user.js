@@ -30,7 +30,12 @@ const userSchema = new mongoose.Schema(
             message:
                 "Password must be strong (Min 8 characters, 1 uppercase, 1 lowercase, 1 number, 1 symbol)"
         }
-    }
+    },
+    profilePicture: {
+        type: String,
+        default: "",
+        trim: true,
+    },
 },
 {
     timestamps: true

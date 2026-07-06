@@ -30,7 +30,7 @@ _id: { $in: labels },
 user: userId,
 });
 
-```
+
 if (validLabels !== labels.length) {
   const error = new Error(
     "One or more labels do not belong to the user"
@@ -38,7 +38,7 @@ if (validLabels !== labels.length) {
   error.statusCode = 400;
   throw error;
 }
-```
+
 
 }
 
@@ -64,32 +64,99 @@ data: newNote,
 });
 });
 
-export const getUserNotes = asyncHandler(async (req, res) => {
-const userId = req.user._id;
+export const getUserNotes = asyncHandler(
+  async (req,res)=>{
 
-if (!userId) {
-const error = new Error("User not authorized");
-error.statusCode = 401;
-throw error;
-}
+    const userId = req.user._id;
 
-const { trashed, archived } = req.query;
 
-let notes;
+    const {
+      trashed,
+      archived,
+      page = 1,
+      limit = 20,
+    } = req.query;
 
-if (trashed === "true") {
-notes = await Note.findTrashedByUser(userId);
-} else if (archived === "true") {
-notes = await Note.findArchivedByUser(userId);
-} else {
-notes = await Note.findByUser(userId);
-}
 
-res.status(200).json({
-success: true,
-data: notes,
-});
-});
+    let filter = {
+      user:userId,
+    };
+
+
+    let notes;
+
+
+    if(trashed==="true"){
+
+      notes =
+      await Note.findTrashedByUser(
+        userId
+      );
+
+    }
+
+    else if(archived==="true"){
+
+      notes =
+      await Note.findArchivedByUser(
+        userId
+      );
+
+    }
+
+    else{
+
+      notes =
+      await Note.findByUser(
+        userId,
+        {},
+        {
+          page:Number(page),
+          limit:Number(limit),
+        }
+      );
+
+    }
+
+
+    const totalNotes =
+      await Note.countDocuments({
+        user:userId,
+        trashed:false,
+      });
+
+
+    res.status(200).json({
+
+      success:true,
+
+      data:{
+
+        notes,
+
+        pagination:{
+
+          page:Number(page),
+
+          limit:Number(limit),
+
+          totalNotes,
+
+          totalPages:
+          Math.ceil(
+            totalNotes / limit
+          ),
+
+          hasNextPage:
+          page <
+          Math.ceil(
+            totalNotes / limit
+          ),
+        },
+      },
+    });
+  }
+);
 
 export const updateNote = asyncHandler(async (req, res) => {
 const { id } = req.params;
@@ -128,7 +195,7 @@ _id: { $in: updateData.labels },
 user: userId,
 });
 
-```
+
 if (
   validLabels !== updateData.labels.length
 ) {
@@ -138,7 +205,7 @@ if (
   error.statusCode = 400;
   throw error;
 }
-```
+
 
 }
 

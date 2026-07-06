@@ -14,6 +14,7 @@ import {
 } from "./middlewares/errorMiddleware.js";
 import logout from "./routes/auth/logout.js";
 import { startCronJobs } from "./utils/cronJobs.js";
+import profile from "./routes/auth/profile.js";
 
 const app= express();
 app.use(cors({
@@ -30,10 +31,11 @@ startCronJobs();
 app.use('/api/users', signup);
 app.use('/api/users', signin);
 
-
 app.use(protect);
 
 app.use('/api/users', logout);
+app.use("/api/users", profile);
+
 app.use('/api', noteRoutes);
 app.use('/api/labels', labelRoute);
 

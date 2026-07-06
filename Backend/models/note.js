@@ -101,16 +101,36 @@ const noteSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-noteSchema.statics.findByUser = function (userId, options = {}) {
+noteSchema.statics.findByUser = function (
+  userId,
+  options = {},
+  pagination = {}
+) {
+
+  const {
+    page = 1,
+    limit = 20
+  } = pagination;
+
+
   const query = {
     user: userId,
     trashed: false,
     archived: false,
     ...options,
   };
+
+
   return this.find(query)
     .populate("labels")
-    .sort({ pinned: -1, updatedAt: -1 });
+    .sort({
+      pinned: -1,
+      updatedAt: -1,
+    })
+    .skip(
+      (page - 1) * limit
+    )
+    .limit(limit);
 };
 
 noteSchema.statics.findArchivedByUser = function (userId) {

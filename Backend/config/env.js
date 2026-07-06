@@ -5,6 +5,9 @@ dotenv.config();
 const requiredEnvVars = [
   "MONGO_URI",
   "JWT_SECRET",
+  "CLOUDINARY_CLOUD_NAME",
+  "CLOUDINARY_API_KEY",
+  "CLOUDINARY_API_SECRET",
 ];
 
 const missingEnvVars =
@@ -31,14 +34,31 @@ if (jwtSecret.length < 32) {
 }
 
 export const env = {
+
   MONGO_URI:
     process.env.MONGO_URI.trim(),
 
-  JWT_SECRET: jwtSecret,
+  JWT_SECRET:
+    jwtSecret,
 
-  PORT: Number(
-    process.env.PORT || 4000
-  ),
+
+  CLOUDINARY_CLOUD_NAME:
+    process.env
+      .CLOUDINARY_CLOUD_NAME,
+
+  CLOUDINARY_API_KEY:
+    process.env
+      .CLOUDINARY_API_KEY,
+
+  CLOUDINARY_API_SECRET:
+    process.env
+      .CLOUDINARY_API_SECRET,
+
+
+  PORT:
+    Number(
+      process.env.PORT || 4000
+    ),
 
   NODE_ENV:
     process.env.NODE_ENV ||
@@ -48,3 +68,4 @@ export const env = {
     process.env.CLIENT_URL ||
     "http://localhost:5173",
 };
+
