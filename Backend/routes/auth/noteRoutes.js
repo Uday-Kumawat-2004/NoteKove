@@ -1,7 +1,13 @@
 import express from "express";
 import {
-  createNote, getUserNotes, deleteNote,
-  permanentDeleteNote, updateNote, restoreNote, searchNotes,
+createNote,
+getUserNotes,
+deleteNote,
+permanentDeleteNote,
+updateNote,
+restoreNote,
+searchNotes,
+getReminderNotes
 } from "../../controllers/noteController.js";
 import {
   createNoteValidation, updateNoteValidation, searchNoteValidation,
@@ -18,6 +24,7 @@ router.delete("/notes/:id/permanent", permanentDeleteNote);
 // param routes after
 router.post("/notes", createNoteValidation, validate, createNote);
 router.get("/notes", getUserNotes);
+router.get("/notes/reminders",getReminderNotes);
 router.put("/notes/:id", updateNoteValidation, validate, updateNote);
 router.delete("/notes/:id", deleteNote);
 

@@ -343,3 +343,27 @@ export const searchNotes = asyncHandler(
     });
   }
 );
+
+export const getReminderNotes =
+asyncHandler(async(req,res)=>{
+
+
+const userId=req.user._id;
+
+
+const notes =
+await Note.findReminderNotes(
+  userId
+);
+
+
+res.status(200).json({
+
+success:true,
+
+data:notes
+
+});
+
+
+});

@@ -93,10 +93,18 @@ const noteSchema = new mongoose.Schema(
       default: 0,
     },
     reminders: [
-      {
-        type: Date,
-      },
-    ],
+  {
+    date: {
+      type: Date,
+      required: true,
+    },
+
+    completed: {
+      type: Boolean,
+      default: false,
+    },
+  },
+],
   },
   { timestamps: true }
 );
@@ -192,6 +200,29 @@ noteSchema.statics.findWithUpcomingReminders = function (userId) {
     "reminders.date": { $gte: new Date() },
     "reminders.completed": false,
   }).sort({ "reminders.date": 1 });
+};
+
+noteSchema.statics.findReminderNotes =
+function(userId){
+
+  return this.find({
+
+    user:userId,
+
+    trashed:false,
+
+    "reminders.completed":false,
+
+    "reminders.date":{
+      $gte:new Date()
+    }
+
+  })
+  .populate("labels")
+  .sort({
+    "reminders.date":1
+  });
+
 };
 
 export default mongoose.model("Note", noteSchema);
