@@ -1,10 +1,9 @@
-// src/components/Header.jsx
+
 import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { useSearch } from "../contexts/SearchContext";
-
+import { useSearch } from "../../contexts/SearchContext";
 export default function Header() {
   const navigate = useNavigate();
   const location = useLocation();

@@ -1,7 +1,7 @@
 // src/components/NotesBoard.jsx
-import NoteCard from "./NoteBoardCompo/NoteCard";
-import { useGetNotes } from "../hooks/useNoteApi";
-import useSearchNotes from "../hooks/useSearchNotes";
+import NoteCard from "./display/NoteCard";
+import { useGetNotes } from "../../hooks/useNoteApi";
+import useSearchNotes from "../../hooks/useSearchNotes";
 
 export default function NotesBoard({
   currentLabelId,

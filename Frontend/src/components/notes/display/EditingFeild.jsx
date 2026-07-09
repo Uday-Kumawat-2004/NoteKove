@@ -1,15 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbtack, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useRef, useState, useEffect } from "react";
-import BgOptions from "../NoteInputCompo/BgOptions";
-import LabelsDiv from "../NoteInputCompo/LabelsDiv";
-import LabelOptions from "../NoteInputCompo/LabelOptions";
-import { useGetLabels } from "../../hooks/useLabelApi";
-import ListArea from "../NoteInputCompo/ListArea";
-import Archive from "../NoteInputCompo/Archive";
-import Reminder from "../NoteInputCompo/Reminder";
-import RichTextEditor from "../NoteInputCompo/RichTextEditor";
-import { useUpdateNote } from "../../hooks/useNoteApi";
+import BgOptions from "../editor/BgOptions";
+import LabelsDiv from "../editor/LabelsDiv";
+import LabelOptions from "../editor/LabelOptions";
+import { useGetLabels } from "../../../hooks/useLabelApi";
+import ListArea from "../editor/ListArea";
+import Archive from "../editor/Archive";
+import Reminder from "../editor/Reminder";
+import RichTextEditor from "../editor/RichTextEditor";
+import { useUpdateNote } from "../../../hooks/useNoteApi";
 export default function EditingFeild({ existingData, closeModal }) {
   const [title, setTitle] = useState(existingData.title || "");
   const [noteContent, setNoteContent] = useState(

@@ -9,7 +9,7 @@ import {
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import { useGetLabels } from "../../hooks/useLabelApi";
+import { useGetLabels } from "../../../hooks/useLabelApi";
 
 function LabelEditWindow({ onClose }) {
   const {

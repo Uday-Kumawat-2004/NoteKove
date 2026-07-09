@@ -1,9 +1,9 @@
 import Header from "../components/header/Header";
 import SideDrawer from "../components/sidebar/SideDrawer";
-import NoteInput from "../components/NoteInput";
+import NoteInput from "../components/notes/NoteInput";
 import { useSearch } from "../contexts/SearchContext";
 import useSearchNotes from "../hooks/useSearchNotes";
-import NoteCard from "../components/NoteBoardCompo/NoteCard";
+import NoteCard from "../components/notes/display/NoteCard";
 export default function Search() {
   const { query } = useSearch();
   const { data, loading, error } = useSearchNotes(query);

@@ -10,7 +10,7 @@ import {
 import draftToHtml from "draftjs-to-html";
 import DOMPurify from "dompurify";
 import ChecklistPreview from "./ChecklistPreview";
-import { useUpdateNote } from "../../hooks/useNoteApi";
+import { useUpdateNote } from "../../../hooks/useNoteApi";
 import { useState } from "react";
 import EditingFeild from "./EditingFeild";
 import axios from "axios";

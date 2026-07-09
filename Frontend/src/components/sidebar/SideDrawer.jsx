@@ -10,8 +10,8 @@ import {
   faTrash,
   faArchive,
 } from "@fortawesome/free-solid-svg-icons";
-import { useGetLabels } from "../hooks/useLabelApi";
-import LabelEditWindow from "./NoteBoardCompo/LabelEditWindow";
+import { useGetLabels } from "../../hooks/useLabelApi";
+import LabelEditWindow from "../notes/display/LabelEditWindow";
 
 const navItems = [
   { name: "Home", path: "/home", icon: faHouse },

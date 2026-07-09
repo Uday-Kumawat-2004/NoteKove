@@ -2,14 +2,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareCheck } from "@fortawesome/free-regular-svg-icons";
 import { faThumbtack, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
-import BgOptions from "./NoteInputCompo/BgOptions";
-import LabelsDiv from "./NoteInputCompo/LabelsDiv";
-import LabelOptions from "./NoteInputCompo/LabelOptions";
-import { useGetLabels } from "../hooks/useLabelApi";
-import ListArea from "./NoteInputCompo/ListArea";
-import Archive from "./NoteInputCompo/Archive";
-import Reminder from "./NoteInputCompo/Reminder";
-import RichTextEditor from "./NoteInputCompo/RichTextEditor";
+import BgOptions from "./editor/BgOptions";
+import LabelsDiv from "./editor/LabelsDiv";
+import LabelOptions from "./editor/LabelOptions";
+import { useGetLabels } from "../../hooks/useLabelApi";
+import ListArea from "./editor/ListArea";
+import Archive from "./editor/Archive";
+import Reminder from "./editor/Reminder";
+import RichTextEditor from "./editor/RichTextEditor";
 import axios from "axios";
 
 export default function NoteInput({ defaultLabels = [] }) {

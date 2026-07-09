@@ -1,7 +1,7 @@
 import Header from "../components/header/Header";
 import SideDrawer from "../components/sidebar/SideDrawer";
-import NoteInput from "../components/NoteInput";
-import NotesBoard from "../components/NotesBoard";
+import NoteInput from "../components/notes/NoteInput";
+import NotesBoard from "../components/notes/NotesBoard";
 
 export default function Home() {
   return (
