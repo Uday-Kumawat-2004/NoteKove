@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
-import Header from "../components/Header";
+import Header from "../components/header/Header";
 
 export default function Signup() {
   const [passNotMatched, setPassNotMatched] = useState(false);

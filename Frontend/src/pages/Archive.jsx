@@ -1,5 +1,5 @@
-import Header from "../components/Header";
-import SideDrawer from "../components/SideDrawer";
+import Header from "../components/header/Header";
+import SideDrawer from "../components/sidebar/SideDrawer";
 import NotesBoard from "../components/NotesBoard";
 
 export default function Archive() {
