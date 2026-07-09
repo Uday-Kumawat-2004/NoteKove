@@ -1,277 +1,598 @@
+import {
+  faThumbtack,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { faSquareCheck } from "@fortawesome/free-regular-svg-icons";
-import { faThumbtack, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useRef, useState } from "react";
+
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
+
 import BgOptions from "./editor/BgOptions";
 import LabelsDiv from "./editor/LabelsDiv";
 import LabelOptions from "./editor/LabelOptions";
-import { useGetLabels } from "../../hooks/useLabelApi";
 import ListArea from "./editor/ListArea";
 import Archive from "./editor/Archive";
 import Reminder from "./editor/Reminder";
 import RichTextEditor from "./editor/RichTextEditor";
-import axios from "axios";
 
-export default function NoteInput({ defaultLabels = [] }) {
+
+import { useGetLabels } from "../../hooks/useLabelApi";
+import { createNote } from "../../services/noteService";
+
+
+export default function NoteInput({
+  defaultLabels = [],
+}) {
+
   const [toggle, setToggle] = useState(false);
+
   const [expansionLevel, setExpansionLevel] = useState(0);
+
+
   const [pin, setPin] = useState(false);
-  const [isPaletteOpen, setIsPaletteOpen] = useState(false);
-  const [backgroundColor, setBackgroundColor] = useState("");
-  const [islabelOpen, setIsLabelOpen] = useState(false);
-  const [onLabelSelect, setOnLabelSelect] = useState([]);
-  const [isListOpen, setIsListOpen] = useState(false);
-  const [checklist, setChecklist] = useState([{ text: "", done: false }]);
+
   const [archived, setArchived] = useState(false);
-  const [isRemiderOpen, setIsReminderOpen] = useState(false);
+
+
+  const [isPaletteOpen, setIsPaletteOpen] = useState(false);
+
+  const [islabelOpen, setIsLabelOpen] = useState(false);
+
+  const [isReminderOpen, setIsReminderOpen] = useState(false);
+
+
+  const [backgroundColor, setBackgroundColor] = useState("");
+
+
+  const [onLabelSelect, setOnLabelSelect] = useState([]);
+
+
+  const [isListOpen, setIsListOpen] = useState(false);
+
+
+  const [checklist, setChecklist] = useState([
+    {
+      text: "",
+      done: false,
+    },
+  ]);
+
+
   const [reminderDate, setReminderDate] = useState("");
+
+
   const [title, setTitle] = useState("");
+
+
   const [noteContent, setNoteContent] = useState({
     raw: null,
     plainText: "",
     length: 0,
   });
-  const[editorKey, setEditorKey] = useState("")
+
+
+  const [editorKey, setEditorKey] = useState(0);
+
+
   const [isSaving, setIsSaving] = useState(false);
+
+
+
   const {
     data: labels,
     error: labelError,
     loading: labelLoading,
-  } = useGetLabels("http://localhost:4000/api/labels");
-  console.log(onLabelSelect);
+  } = useGetLabels();
+
+
+
   const titleRef = useRef(null);
 
+
+
   function handleToggle() {
+
     if (!toggle) {
+
       setToggle(true);
+
     }
+
   }
 
-    useEffect(() => {
+
+
+  useEffect(() => {
+
     if (defaultLabels.length > 0) {
+
       setOnLabelSelect(defaultLabels);
+
     }
+
   }, [defaultLabels]);
 
-  const handleTitleInput = () => {
-    const textarea = titleRef.current;
-    if (textarea) {
-      textarea.style.height = "auto"; // Reset height
-      textarea.style.height = `${textarea.scrollHeight}px`; // Set new height
-    }
-  };
 
-  function handleExpansion(length) {
-    if (length <= 250) {
-      setExpansionLevel(0);
-    } else if (length <= 600) {
-      setExpansionLevel(1);
-    } else if (length <= 1200) {
-      setExpansionLevel(2);
-    } else {
-      setExpansionLevel(3);
+
+  function handleTitleInput() {
+
+    const textarea = titleRef.current;
+
+
+    if (textarea) {
+
+      textarea.style.height = "auto";
+
+      textarea.style.height =
+        `${textarea.scrollHeight}px`;
+
     }
+
   }
 
-  const handleContentChange = (content) => {
+
+
+  function handleExpansion(length) {
+
+    if (length <= 250) {
+
+      setExpansionLevel(0);
+
+    } else if (length <= 600) {
+
+      setExpansionLevel(1);
+
+    } else if (length <= 1200) {
+
+      setExpansionLevel(2);
+
+    } else {
+
+      setExpansionLevel(3);
+
+    }
+
+  }
+
+
+
+  function handleContentChange(content) {
+
     setNoteContent(content);
-  };
 
-  const saveNote = async () => {
-    setIsSaving(true);
+  }
 
-    try {
-      const reminders = reminderDate ? [new Date(reminderDate)] : [];
 
-      const noteData = {
-        title: title.trim(),
-        content: noteContent,
-        checklist: isListOpen
-          ? checklist.filter((item) => item.text.trim())
-          : [],
-        noteType: isListOpen ? "checklist" : "text",
-        color: backgroundColor || "transparent",
-        labels: onLabelSelect,
-        pinned: pin,
-        archived: archived,
-        reminders: reminders,
-      };
 
-      const res = await axios.post(
-        "http://localhost:4000/api/notes",
-        noteData,
-        {
-          withCredentials: true,
-        }
+  async function saveNote() {
+
+    if (isSaving) return;
+
+
+    const emptyTitle =
+      !title.trim();
+
+
+    const emptyContent =
+      !noteContent.plainText?.trim();
+
+
+    const emptyChecklist =
+      checklist.every(
+        item => !item.text.trim()
       );
 
-      if (res.data.success) {
-        console.log("Note saved successfully");
-        alert("Note saved successfully!");
-        resetForm();
-      }
-    } catch (err) {
-      console.log("Error in savong note: ", err);
-      if (err.response) {
-        alert(`Failed to save note: ${err.response.data.err}`);
-      } else {
-        alert("Failed to save note. Please check your connection.");
-      }
-    } finally {
-      setIsSaving(false);
-    }
-  };
 
-  const resetForm = () => {
-    setToggle(false);
-    setExpansionLevel(0);
-    setTitle("");
-    setNoteContent({ raw: null, plainText: "", length: 0 });
-    setEditorKey((prev) => prev + 1);
-    if (titleRef.current) {
-      titleRef.current.value = "";
-      titleRef.current.style.height = "auto";
+    if (
+      emptyTitle &&
+      emptyContent &&
+      emptyChecklist
+    ) {
+
+      return;
+
     }
+
+
+
+    setIsSaving(true);
+
+
+    try {
+
+      const noteData = {
+
+        title: title.trim(),
+
+
+        content: noteContent,
+
+
+        checklist: isListOpen
+          ? checklist.filter(
+              item => item.text.trim()
+            )
+          : [],
+
+
+        noteType: isListOpen
+          ? "checklist"
+          : "text",
+
+
+        color:
+          backgroundColor ||
+          "transparent",
+
+
+        labels: onLabelSelect,
+
+
+        pinned: pin,
+
+
+        archived,
+
+
+        reminders: reminderDate
+          ? [new Date(reminderDate)]
+          : [],
+
+      };
+
+
+      await createNote(noteData);
+
+
+      resetForm();
+
+
+    } catch (err) {
+
+
+      console.error(
+        "Create note failed:",
+        err
+      );
+
+
+    } finally {
+
+
+      setIsSaving(false);
+
+
+    }
+
+  }
+
+
+
+  function resetForm() {
+
+    setToggle(false);
+
+    setExpansionLevel(0);
+
+    setTitle("");
+
+
+    setNoteContent({
+      raw: null,
+      plainText: "",
+      length: 0,
+    });
+
+
+    setEditorKey(
+      prev => prev + 1
+    );
+
+
+    if (titleRef.current) {
+
+      titleRef.current.value = "";
+
+      titleRef.current.style.height = "auto";
+
+    }
+
+
     setBackgroundColor("");
+
     setIsPaletteOpen(false);
+
     setOnLabelSelect([]);
+
     setIsReminderOpen(false);
+
     setIsListOpen(false);
-    setChecklist([{ text: "", done: false }]);
+
+
+    setChecklist([
+      {
+        text: "",
+        done: false,
+      },
+    ]);
+
+
     setReminderDate("");
+
     setPin(false);
+
     setArchived(false);
-  };
+
+  }
+
+
 
   return (
+
     <div
+
       className={`flex ${
-        toggle && "flex-col gap-2 border  border-gray-300"
-      } items-center  p-3 rounded shadow-sm shadow-[#1b2828] w-[750px] h-auto transition-all duration-300 ease-in-out border border-gray-300 transition-border`}
-      style={{ backgroundColor }}
+        toggle &&
+        "flex-col gap-2 border border-gray-300"
+      } items-center p-3 rounded shadow-sm shadow-[#1b2828] w-[750px] h-auto transition-all duration-300 ease-in-out border border-gray-300`}
+
+
+      style={{backgroundColor}}
+
     >
+
+
       {toggle && (
-        <div className="flex flex-1 w-full h-auto transition-all duration-300 ease-in-out">
+
+        <div className="flex flex-1 w-full">
+
+
           <textarea
+
             ref={titleRef}
-            onChange={(e) => {
+
+            onChange={(e)=>{
+
               setTitle(e.target.value);
+
               handleTitleInput();
+
             }}
-            className="flex-1 bg-transparent text-white text-lg  overflow-y-auto placeholder-gray-200 border-none outline-none focus:outline-none transition-all duration-300 ease-in-out resize-none"
+
+            className="flex-1 bg-transparent text-white text-lg overflow-y-auto placeholder-gray-200 border-none outline-none resize-none"
+
             placeholder="Title"
+
             rows={1}
+
             maxLength={250}
+
           />
 
-          <div className="flex justify-center  relative group mr-2 transition-all duration-300 ease-in-out">
-            <button
-              onClick={() => setPin((pin) => !pin)}
-              className="flex  justify-center cursor-pointer p-1 ml-2 transition duration-300 ease-in-out"
-            >
-              <FontAwesomeIcon
-                icon={faThumbtack}
-                className={`text-lg  ${
-                  pin ? "text-gray-200" : "text-gray-400"
-                }  hover:text-gray-300 transition duration-300 ease-in-out`}
-              />
-            </button>
-            <span className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-1/2 translate-y-7 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-in-out whitespace-nowrap">
-              {!pin ? "Pin" : "Unpin"}
-            </span>
-          </div>
-          <div className="flex justify-center  relative group transition-all duration-300 ease-in-out">
-            <button
-              onClick={resetForm}
-              className="flex  justify-center cursor-pointer  p-1 ml-2 transition duration-300 ease-in-out"
-            >
-              <FontAwesomeIcon
-                icon={faXmark}
-                className="text-xl text-gray-200 hover:text-red-400 transition duration-300 ease-in-out"
-              />
-            </button>
-            <span className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-6 translate-y-7 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-in-out whitespace-nowrap">
-              Cancel
-            </span>
-          </div>
+
+          <button
+            onClick={()=>setPin(prev=>!prev)}
+          >
+
+            <FontAwesomeIcon
+
+              icon={faThumbtack}
+
+              className={
+                pin
+                ?
+                "text-gray-200"
+                :
+                "text-gray-400"
+              }
+
+            />
+
+          </button>
+
+
+          <button onClick={resetForm}>
+
+            <FontAwesomeIcon
+
+              icon={faXmark}
+
+              className="text-xl text-gray-200 hover:text-red-400"
+
+            />
+
+          </button>
+
+
         </div>
+
       )}
+
+
 
       {!isListOpen && (
+
         <RichTextEditor
+
           key={editorKey}
+
           expansionLevel={expansionLevel}
+
           toggle={toggle}
+
           handleToggle={handleToggle}
+
           handleExpansion={handleExpansion}
+
           onContentChange={handleContentChange}
+
         />
+
       )}
+
+
 
       {isListOpen && (
-        <ListArea checklist={checklist} setChecklist={setChecklist} />
-      )}
-      {toggle && <LabelsDiv onLabelSelect={onLabelSelect} />}
 
-      {!toggle && (
-        <div className="relative group ml-2 transition-all duration-300 ease-in-out">
-          <button
-            onClick={() => {
-              setIsListOpen((prev) => !prev);
-              setToggle((prev) => !prev);
-            }}
-            className="flex items-center justify-center cursor-pointer  p-1 transition duration-300 ease-in-out"
-          >
-            <FontAwesomeIcon
-              icon={faSquareCheck}
-              className="text-xl text-gray-200 hover:shadow-lg  transition duration-300 ease-in-out"
-            />
-          </button>
-          <span className="absolute bg-[#1f3a3b] bottom-full left-1/2 -translate-x-1/2 translate-y-7 mb-1 px-2 py-1 text-gray-200 text-xs rounded opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-in-out whitespace-nowrap">
-            New list
-          </span>
-        </div>
+        <ListArea
+
+          checklist={checklist}
+
+          setChecklist={setChecklist}
+
+        />
+
       )}
+
+
 
       {toggle && (
-        <div className="flex w-full items-center transition-all duration-300 ease-in-out">
-          <div className="flex flex-1 items-center gap-2.5">
+
+        <LabelsDiv
+
+          onLabelSelect={onLabelSelect}
+
+        />
+
+      )}
+
+
+
+      {!toggle && (
+
+        <button
+
+          onClick={()=>{
+
+            setIsListOpen(prev=>!prev);
+
+            setToggle(prev=>!prev);
+
+          }}
+
+        >
+
+          <FontAwesomeIcon
+
+            icon={faSquareCheck}
+
+            className="text-xl text-gray-200"
+
+          />
+
+        </button>
+
+      )}
+
+
+
+
+      {toggle && (
+
+        <div className="flex w-full items-center">
+
+
+          <div className="flex flex-1 gap-2">
+
+
             <BgOptions
+
               isOpen={isPaletteOpen}
-              setIsLabelOpen={setIsLabelOpen}
-              currentColor={backgroundColor}
+
               setIsOpen={setIsPaletteOpen}
-              onColorSelect={setBackgroundColor}
-            />
-            <LabelOptions
-              islabelOpen={islabelOpen}
+
               setIsLabelOpen={setIsLabelOpen}
+
+              currentColor={backgroundColor}
+
+              onColorSelect={setBackgroundColor}
+
+            />
+
+
+
+            <LabelOptions
+
+              islabelOpen={islabelOpen}
+
+              setIsLabelOpen={setIsLabelOpen}
+
               setIsPaletteOpen={setIsPaletteOpen}
+
               onLabelSelect={onLabelSelect}
+
               setOnLabelSelect={setOnLabelSelect}
+
               labels={labels}
+
               loading={labelLoading}
+
               error={labelError}
+
             />
-            <Archive archived={archived} setArchived={setArchived} />
+
+
+
+            <Archive
+
+              archived={archived}
+
+              setArchived={setArchived}
+
+            />
+
+
+
             <Reminder
-              isRemiderOpen={isRemiderOpen}
+
+              isReminderOpen={isReminderOpen}
+
               setIsReminderOpen={setIsReminderOpen}
+
               reminderDate={reminderDate}
+
               setReminderDate={setReminderDate}
+
             />
+
+
           </div>
 
+
+
           <button
-            type="button"
+
             onClick={saveNote}
+
             disabled={isSaving}
-            className="w-[80px] h-[35px] bg-gradient-to-r from-cyan-500 to-[#25879f] text-white font-semibold rounded cursor-pointer shadow-lg hover:scale-[1.02] transition-transform duration-200"
+
+            className="w-[80px] h-[35px] bg-gradient-to-r from-cyan-500 to-[#25879f] text-white rounded"
+
           >
-            {isSaving ? "Saving..." : "Save"}
+
+            {
+              isSaving
+              ?
+              "Saving..."
+              :
+              "Save"
+            }
+
           </button>
+
+
         </div>
+
       )}
+
     </div>
+
   );
+
 }
