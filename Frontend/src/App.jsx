@@ -1,15 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-
 import { SearchProvider } from "./contexts/SearchContext";
 
-
 import ProtectedRoute from "./routes/ProtectedRoute";
+
+import AppLayout from "./layouts/AppLayout";
 
 
 import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
-
 
 import Home from "./pages/Home";
 import LabelPage from "./pages/LabelPage";
@@ -20,42 +19,55 @@ import Search from "./pages/Search";
 
 
 
-function App() {
+function App(){
 
 
   return (
 
+
     <div className="w-screen h-screen bg-gradient-to-br from-[#0b191f] via-[#0f2027] to-[#203a43]">
+
 
 
       <SearchProvider>
 
 
+
         <Router>
+
 
 
           <Routes>
 
 
 
-            {/* PUBLIC ROUTES */}
+            {/* Public routes */}
 
 
-            <Route 
-              path="/" 
-              element={<Signup />} 
+            <Route
+
+              path="/"
+
+              element={<Signup />}
+
             />
 
 
-            <Route 
-              path="/signup" 
-              element={<Signup />} 
+            <Route
+
+              path="/signup"
+
+              element={<Signup />}
+
             />
 
 
-            <Route 
-              path="/signin" 
-              element={<Signin />} 
+            <Route
+
+              path="/signin"
+
+              element={<Signin />}
+
             />
 
 
@@ -63,58 +75,81 @@ function App() {
 
 
 
-
-            {/* PROTECTED ROUTES */}
+            {/* Protected app routes */}
 
 
             <Route element={<ProtectedRoute />}>
 
 
-              <Route 
-                path="/home" 
-                element={<Home />} 
-              />
+              <Route element={<AppLayout />}>
 
 
-              <Route 
-                path="/labels/:id" 
-                element={<LabelPage />} 
-              />
+                <Route
+
+                  path="/home"
+
+                  element={<Home />}
+
+                />
 
 
-              <Route 
-                path="/ArchivedItems" 
-                element={<Archive />} 
-              />
+                <Route
+
+                  path="/labels/:id"
+
+                  element={<LabelPage />}
+
+                />
 
 
-              <Route 
-                path="/TrashedItems" 
-                element={<TrashPage />} 
-              />
+                <Route
+
+                  path="/ArchivedItems"
+
+                  element={<Archive />}
+
+                />
 
 
-              <Route 
-                path="/Search" 
-                element={<Search />} 
-              />
+                <Route
+
+                  path="/TrashedItems"
+
+                  element={<TrashPage />}
+
+                />
+
+
+                <Route
+
+                  path="/Search"
+
+                  element={<Search />}
+
+                />
+
+
+              </Route>
 
 
             </Route>
 
 
 
-
           </Routes>
+
 
 
         </Router>
 
 
+
       </SearchProvider>
 
 
+
     </div>
+
 
   );
 

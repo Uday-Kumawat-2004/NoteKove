@@ -1,24 +1,33 @@
-import Header from "../components/header/Header";
-import SideDrawer from "../components/sidebar/SideDrawer";
 import NotesBoard from "../components/notes/NotesBoard";
 
-export default function TrashPage() {
+
+
+
+
+export default function TrashPage(){
+
+
+
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
-      <Header />
 
-      <div className="flex flex-1 overflow-hidden">
-        <div>
-          <SideDrawer />
-        </div>
 
-        <div className="flex-1 overflow-y-auto p-10">
-          <div className="flex justify-center items-center w-full h-auto">
+    <div className="flex justify-center items-center w-full h-auto">
 
-            <NotesBoard showTrashed={true} />
-          </div>
-        </div>
-      </div>
+
+
+      <NotesBoard
+
+        showTrashed={true}
+
+      />
+
+
+
     </div>
+
+
   );
+
+
+
 }

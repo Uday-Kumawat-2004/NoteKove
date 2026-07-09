@@ -1,13 +1,9 @@
-import Header from "../components/header/Header";
+import { useParams } from "react-router-dom";
 
-import SideDrawer from "../components/sidebar/SideDrawer";
 
 import NoteInput from "../components/notes/NoteInput";
 
 import NotesBoard from "../components/notes/NotesBoard";
-
-
-import { useParams } from "react-router-dom";
 
 
 import { useGetLabels } from "../hooks/useLabelApi";
@@ -17,7 +13,8 @@ import { useGetLabels } from "../hooks/useLabelApi";
 
 
 
-export default function LabelPage() {
+export default function LabelPage(){
+
 
 
   const { id } = useParams();
@@ -40,12 +37,13 @@ export default function LabelPage() {
 
 
 
-  if (loading) {
+
+  if(loading){
 
 
     return (
 
-      <div>
+      <div className="text-gray-300">
 
         Loading...
 
@@ -61,12 +59,13 @@ export default function LabelPage() {
 
 
 
-  if (error) {
+
+  if(error){
 
 
     return (
 
-      <div>
+      <div className="text-red-400">
 
         Error loading labels
 
@@ -83,13 +82,11 @@ export default function LabelPage() {
 
 
 
-
   const currentLabel = labels.find(
 
-    label => label._id === id
+    (label)=> label._id === id
 
   );
-
 
 
 
@@ -100,104 +97,45 @@ export default function LabelPage() {
   return (
 
 
-    <div className="h-screen flex flex-col overflow-hidden">
+    <>
 
 
 
-      <Header />
+      <div className="flex justify-center items-center w-full h-auto">
 
 
 
-      <div className="flex flex-1 overflow-hidden">
+        {
 
+          currentLabel
 
+          ?
 
+          (
 
+            <NoteInput
 
-        <div>
-
-          <SideDrawer />
-
-        </div>
-
-
-
-
-
-
-
-
-        <div className="flex-1 overflow-y-auto p-10">
-
-
-
-
-
-
-          <div className="flex justify-center items-center w-full h-auto">
-
-
-            {
-
-              currentLabel
-
-              ?
-
-              (
-
-                <NoteInput
-
-                  defaultLabels={[currentLabel]}
-
-                />
-
-              )
-
-
-              :
-
-
-              (
-
-                <div>
-
-                  Label not found
-
-                </div>
-
-              )
-
-            }
-
-
-          </div>
-
-
-
-
-
-
-
-
-          <div className="flex justify-center items-center w-full h-auto">
-
-
-            <NotesBoard
-
-              currentLabelId={id}
+              defaultLabels={[currentLabel]}
 
             />
 
-
-          </div>
-
+          )
 
 
+          :
 
 
+          (
 
+            <div className="text-gray-300">
 
-        </div>
+              Label not found
+
+            </div>
+
+          )
+
+        }
 
 
 
@@ -205,7 +143,29 @@ export default function LabelPage() {
 
 
 
-    </div>
+
+
+
+
+
+      <div className="flex justify-center items-center w-full h-auto">
+
+
+
+        <NotesBoard
+
+          currentLabelId={id}
+
+        />
+
+
+
+      </div>
+
+
+
+
+    </>
 
 
   );
